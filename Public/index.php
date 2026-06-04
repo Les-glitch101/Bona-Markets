@@ -1,6 +1,6 @@
 <?php
 $pageTitle = 'Home';
-require_once '../includes/header.php';
+require_once '../Includes/header.php';
 ?>
 
 <div class="container mx-auto px-4 py-8">
@@ -10,4 +10,4 @@ require_once '../includes/header.php';
     </div>
 </div>
 
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once '../Includes/footer.php'; ?>
