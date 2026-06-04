@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// need to relate/connect products to vendors and vice versa, and then, user to orders and vice versa
+model Users {
+  id Int @id @default(autoincrement())
+  username String @unique
+  email String @unique
+  order Orders[]
+  cart Cart?
+}
+
+model Vendors {
+  id Int @id @default(autoincrement())
+  name String @unique
+  products Products[]
+}
+
+model Products {
+  id Int @id @default(autoincrement())
+  name String
+  price Float
+  vendorId Int
+  vendor Vendors @relation(fields: [vendorId], references: [id])
+  orderItems OrderItems[]
+  cartItems CartItems[]
+  @@unique([name, vendorId])
+}
+
+model Orders {
+  id Int @id @default(autoincrement())
+  userId Int
+  user Users @relation(fields: [userId], references: [id])
+  items OrderItems[]
+  totalPrice Float
+}
+
+model OrderItems {
+  id Int @id @default(autoincrement())
+  orderId Int
+  order Orders @relation(fields: [orderId], references: [id])
+  productId Int
+  product Products @relation(fields: [productId], references: [id])
+  quantity Int @default(1)
+}
+
+// 2026/06/03: need to add and connect cart and cart items - 2026/06/04: added them
+
+model Cart {
+  id Int @id @default(autoincrement())
+  userId Int @unique
+  user Users @relation(fields: [userId], references: [id])
+  items CartItems[]
+  totalPrice Float
+}
+
+model CartItems {
+  id Int @id @default(autoincrement())
+  cartId Int
+  cart Cart @relation(fields: [cartId], references: [id])
+  productId Int
+  product Products @relation(fields: [productId], references: [id])
+  quantity Int @default(1)
+}
+
