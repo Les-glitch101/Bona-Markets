@@ -4,8 +4,8 @@
 
 # Requirements
 
-Install Node.js, use the ready coded, easy to install one:
-https://nodejs.org/
+Install Node.js, use the prebuilt, easy-to-install one:
+[https://nodejs.org/](https://nodejs.org/en/download)
 
 ---
 
