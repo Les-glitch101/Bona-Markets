@@ -35,15 +35,15 @@ DATABASE_URL="postgresql://postgres:password@localhost:5432/postgres"
 
 Run, in your terminal:
 
-npx prisma generate
-npx prisma migrate dev
-npx prisma db seed
+- npx prisma generate
+- npx prisma migrate dev
+- npx prisma db seed
 
 ---
 
 ## Run Project in terminal
 
-npm run dev
+- npm run dev
 
 ---
 
