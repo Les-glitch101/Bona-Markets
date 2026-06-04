@@ -145,7 +145,7 @@
                             <span class="text-xs text-gray-500 ml-2">(24)</span>
                         </div>
                         <div class="flex justify-between items-center mt-3">
-                            <span class="text-xl font-bold text-blue-600">$79.99</span>
+                            <span class="text-xl font-bold text-blue-600">R79.99</span>
                             <button class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-blue-700 transition">
                                 Add to Cart
                             </button>
@@ -166,7 +166,7 @@
                             <span class="text-xs text-gray-500 ml-2">(102)</span>
                         </div>
                         <div class="flex justify-between items-center mt-3">
-                            <span class="text-xl font-bold text-blue-600">$199.99</span>
+                            <span class="text-xl font-bold text-blue-600">R199.99</span>
                             <button class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-blue-700 transition">
                                 Add to Cart
                             </button>
@@ -187,7 +187,7 @@
                             <span class="text-xs text-gray-500 ml-2">(56)</span>
                         </div>
                         <div class="flex justify-between items-center mt-3">
-                            <span class="text-xl font-bold text-blue-600">$89.99</span>
+                            <span class="text-xl font-bold text-blue-600">R89.99</span>
                             <button class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-blue-700 transition">
                                 Add to Cart
                             </button>
@@ -208,7 +208,7 @@
                             <span class="text-xs text-gray-500 ml-2">(18)</span>
                         </div>
                         <div class="flex justify-between items-center mt-3">
-                            <span class="text-xl font-bold text-blue-600">$34.99</span>
+                            <span class="text-xl font-bold text-blue-600">R34.99</span>
                             <button class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-blue-700 transition">
                                 Add to Cart
                             </button>
