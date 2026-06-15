@@ -17,125 +17,204 @@
 1. Clone the repo
 2. Open in browser: `/public/index.php`
 
-## Status
-Week 1 – Foundation complete
+# Bona Markets – Week 2 Checklist
 
-# Authentication Plan
+## Week 2 Focus: Authentication + Vendor Application
 
-## Pages (Week 2)
-- /login.php
-- /register.php
-- /logout.php
+**Dates:** [Start date] to [End date]  
+**Status:** ⬜ In Progress | ✅ Complete | ❌ Blocked
 
-## Session Variables
-- $_SESSION['user_id']
-- $_SESSION['role']
-- $_SESSION['email']
+---
 
-## Role-Based Access
-- Admin → /admin/*
-- Vendor → /vendor/*
-- Buyer → default
+## Project Manager
 
-## Functions Needed (Week 2)
-- requireLogin()
-- requireVendor()
-- requireAdmin()
+| Task | Status | Notes |
+|------|--------|-------|
+| Run daily standups at [time] | ⬜ | |
+| Create Week 2 project board | ⬜ | |
+| Review and merge pull requests | ⬜ | |
+| Update README with DB setup instructions | ⬜ | |
 
-# Vendor Module Plan
+---
 
-## Pages (Week 2)
-- /vendor/apply.php
-- /vendor/profile.php
-- /vendor/dashboard.php
+## Database & Backend Foundation
 
-## Application Fields
-- Business name
-- Logo upload
-- Description
-- Bank details
+| Task | Status | Notes |
+|------|--------|-------|
+| Create `config/database.php` (PDO connection) | ⬜ | |
+| Insert seed data (users, categories, products) | ⬜ | |
+| Share database credentials via `.env` | ⬜ | |
 
-## Approval Flow
-1. Submit → approved = FALSE
-2. Admin approves → approved = TRUE
-3. Vendor can add products
+---
 
-# Product Management Plan
+## Authentication & Authorization
 
-## Pages (Week 3)
-- /vendor/products/index.php
-- /vendor/products/create.php
-- /vendor/products/edit.php
-- /vendor/products/delete.php
+| Task | Status | Notes |
+|------|--------|-------|
+| Add `session_start()` to all pages | ⬜ | |
+| Implement `register.php` (insert user) | ⬜ | |
+| Implement `login.php` (verify + session) | ⬜ | |
+| Implement `logout.php` (destroy session) | ⬜ | |
+| Add role-based redirects | ⬜ | |
+| Update header for session menu (coordinate with Person 10) | ⬜ | |
 
-## Fields
-- Product name, description, price
-- Category dropdown
-- Image upload (Cloudinary)
-- Stock quantity
+---
 
-# Buyer Marketplace Plan
+## Vendor Module
 
-## Pages (Week 3)
-- /index.php (homepage)
-- /products/index.php (catalogue)
-- /products/show.php (details)
+| Task | Status | Notes |
+|------|--------|-------|
+| Build `vendor/apply.php` form | ⬜ | |
+| Insert application into `vendor_profiles` table | ⬜ | |
+| Build `vendor/dashboard.php` (pending approval message) | ⬜ | |
+| Build `vendor/profile.php` (edit profile) | ⬜ | |
+| Add route protection (vendor only) | ⬜ | |
 
-## Features
-- Search, category filter, sort
-- Responsive grid (1→2→3→4 columns)
+---
 
-# Shopping Cart Plan
+## Product Management (Prep for Week 3)
 
-## Pages (Week 4)
-- /cart/index.php
-- /cart/checkout.php
-- /cart/success.php
-- /orders/index.php
+| Task | Status | Notes |
+|------|--------|-------|
+| Confirm placeholder files exist in `vendor/products/` | ⬜ | |
+| Review `products` table schema | ⬜ | |
+| Document product form fields | ⬜ | |
+| Coordinate UI design with Person 10 | ⬜ | |
 
-## Features
-- Add/remove/update quantity
-- Stripe test payment
-- Order creation
+---
 
-# Admin Dashboard Plan
+## Buyer Marketplace (Prep for Week 3)
 
-## Pages (Week 4)
-- /admin/dashboard.php
-- /admin/vendors.php
-- /admin/products.php
-- /admin/orders.php
+| Task | Status | Notes |
+|------|--------|-------|
+| Confirm placeholder files exist in `products/` | ⬜ | |
+| Plan search/filter/sort functionality | ⬜ | |
+| Coordinate UI design with Person 10 | ⬜ | |
 
-## Permissions
-- Approve vendors
-- View/delete products
-- View all orders
+---
 
-# Test Plan – Bona Markets
+## Shopping Cart (Prep for Week 4)
 
-## Test Environments
-- Browsers: Chrome, Firefox, Safari
-- Devices: Desktop, tablet, mobile
+| Task | Status | Notes |
+|------|--------|-------|
+| Confirm placeholder files exist in `cart/` and `orders/` | ⬜ | |
+| Plan cart data structure (session vs database) | ⬜ | |
+| Research Stripe test mode setup | ⬜ | |
+| Document checkout flow | ⬜ | |
 
-## Test Phases
-| Week | Focus |
-|------|-------|
-| 2 | Auth + Vendor |
-| 3 | Products + Catalogue |
-| 4 | Cart + Admin |
-| 5 | Full regression |
+---
 
-## Templates
-- Test case: ID, Steps, Expected, Actual, Status
-- Bug report: ID, Description, Severity, Steps, Status
+## Admin Dashboard (Prep for Week 4)
 
-# Setup Guide – Week 1
+| Task | Status | Notes |
+|------|--------|-------|
+| Confirm placeholder files exist in `admin/` | ⬜ | |
+| Plan vendor approval interface | ⬜ | |
+| Define dashboard stats (vendors, products, orders, revenue) | ⬜ | |
 
-## View the Webpage
-1. Download ZIP from GitHub
-2. Extract folder
-3. Open `public/index.php` in browser
+---
 
-## Run with PHP Server (Optional)
-```bash
+## Testing & QA
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Create Week 2 test cases (auth + vendor) | ⬜ | |
+| Execute login/register tests | ⬜ | |
+| Execute vendor application tests | ⬜ | |
+| Log bugs in GitHub Issues | ⬜ | |
+| Submit weekly test report (Friday) | ⬜ | |
+
+### Test Cases to Run
+
+| ID | Description | Status |
+|----|-------------|--------|
+| TC-AUTH-001 | Valid registration | ⬜ |
+| TC-AUTH-002 | Duplicate email registration | ⬜ |
+| TC-AUTH-003 | Valid login | ⬜ |
+| TC-AUTH-004 | Invalid password | ⬜ |
+| TC-AUTH-005 | Non-existent email | ⬜ |
+| TC-AUTH-006 | Logout destroys session | ⬜ |
+| TC-AUTH-007 | Protected routes redirect to login | ⬜ |
+| TC-VENDOR-001 | Submit vendor application | ⬜ |
+| TC-VENDOR-002 | View pending approval message | ⬜ |
+| TC-VENDOR-003 | Edit vendor profile | ⬜ |
+
+---
+
+## Frontend UI / Responsive Design
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Update `header.php` with session-aware menu structure | ⬜ | |
+| Style `vendor/apply.php` (vendor application form) | ⬜ | |
+| Style `vendor/dashboard.php` | ⬜ | |
+| Style `vendor/profile.php` | ⬜ | |
+| Add loading states + error message styling | ⬜ | |
+| Mobile responsive check on all new pages | ⬜ | |
+| Coordinate with Person 4 on form UI | ⬜ | |
+
+---
+
+## Documentation & Demo Video Support
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Update `docs/setup-guide.md` with DB instructions | ⬜ | |
+| Create `docs/week2-checklist.md` (this file) | ⬜ | |
+| Document authentication flow for team | ⬜ | |
+| Collect UI screenshots for final report | ⬜ | |
+
+---
+
+## Week 2 Dependencies
+
+| Task | Depends On | Owner | Status |
+|------|------------|-------|--------|
+| Database installation | None | Person 2 | ⬜ |
+| Authentication (login/register) | Database ready | Person 3 | ⬜ |
+| Vendor application (PHP) | Database ready | Person 4 | ⬜ |
+| Vendor forms (UI) | Person 4 (PHP structure) | Person 10 | ⬜ |
+| Header session menu | Person 3 (session logic) | Person 10 | ⬜ |
+| Testing | Person 3 + Person 4 | Person 9 | ⬜ |
+
+---
+
+## Week 2 Success Criteria
+
+By end of Week 2, the following must work:
+
+- [ ] User can register an account
+- [ ] User can login with correct credentials
+- [ ] User cannot login with wrong password
+- [ ] After login, navbar shows user email and logout button
+- [ ] After logout, navbar shows login/signup buttons
+- [ ] User can submit vendor application
+- [ ] Vendor dashboard shows "pending approval" message
+- [ ] All pages are mobile responsive
+
+---
+
+## Blockers Log
+
+| Date | Blocker | Affects | Status |
+|------|---------|---------|--------|
+| | | | |
+
+---
+
+## Weekly Test Report (Due Friday)
+
+| Metric | Value |
+|--------|-------|
+| Total tests executed | |
+| Passed | |
+| Failed | |
+| Blocked | |
+| Bugs logged | |
+| Critical bugs | |
+
+---
+
+**Last Updated:** [Date]  
+**Next Standup:** [Time]
 php -S localhost:8000 -t public/
