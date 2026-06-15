@@ -27,6 +27,8 @@ async function main() {
        create: {
            email: "gabbi@email.com",
            username: "Gabbi0304",
+           password: "password1203040506!"
+           
        } 
    })
 
@@ -132,8 +134,5 @@ main()
     await pool.end();
     process.exit(1);
 });
-
-
-
 
 
