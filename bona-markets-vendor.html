@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bona Markets — Vendor Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    /* ── TOKENS ─────────────────────────────────────────── */
+    :root {
+      --ink:       #1a1208;
+      --gold:      #e8952a;
+      --gold-lt:   #f5b952;
+      --rust:      #c04b1e;
+      --sage:      #3a7d5e;
+      --sage-lt:   #e8f5ee;
+      --cream:     #fdf8f0;
+      --warm-grey: #f2ece0;
+      --border:    #e5daca;
+      --muted:     #7a6e5f;
+      --white:     #ffffff;
+      --shadow:    0 2px 12px rgba(26,18,8,.08);
+      --shadow-lg: 0 8px 32px rgba(26,18,8,.14);
+      --radius:    10px;
+      --radius-lg: 16px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 15px; scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* ── TYPOGRAPHY ─────────────────────────────────────── */
+    h1, h2, h3, h4, .brand { font-family: 'Syne', sans-serif; }
+
+    /* ── TOPBAR ─────────────────────────────────────────── */
+    .topbar {
+      background: var(--ink);
+      padding: 0 2rem;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -.02em;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .brand span { color: var(--gold); }
+    .brand-dot {
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .topbar-right { display: flex; align-items: center; gap: 1rem; }
+    .topbar-badge {
+      background: var(--gold);
+      color: var(--ink);
+      font-size: .7rem;
+      font-weight: 700;
+      padding: .2rem .55rem;
+      border-radius: 20px;
+      font-family: 'Syne', sans-serif;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .topbar-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--rust) 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 700; font-size: .85rem;
+      cursor: pointer;
+      font-family: 'Syne', sans-serif;
+    }
+    .notif-btn {
+      position: relative;
+      background: none; border: none;
+      cursor: pointer;
+      color: #9c8f7a;
+      padding: .25rem;
+      display: flex;
+    }
+    .notif-btn .dot {
+      position: absolute;
+      top: 2px; right: 2px;
+      width: 7px; height: 7px;
+      background: var(--rust);
+      border-radius: 50%;
+      border: 1.5px solid var(--ink);
+    }
+
+    /* ── LAYOUT ─────────────────────────────────────────── */
+    .shell { display: flex; flex: 1; }
+
+    /* ── SIDEBAR ─────────────────────────────────────────── */
+    .sidebar {
+      width: 230px;
+      min-height: calc(100vh - 58px);
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      padding: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 58px;
+      height: calc(100vh - 58px);
+      overflow-y: auto;
+    }
+    .sidebar-section-label {
+      font-size: .68rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: .9rem 1.4rem .35rem;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .62rem 1.4rem;
+      cursor: pointer;
+      border-radius: 0;
+      color: var(--muted);
+      font-size: .9rem;
+      font-weight: 500;
+      transition: all .18s;
+      border-left: 3px solid transparent;
+      text-decoration: none;
+    }
+    .nav-item:hover { background: var(--warm-grey); color: var(--ink); }
+    .nav-item.active {
+      color: var(--gold);
+      background: #fff8ed;
+      border-left-color: var(--gold);
+      font-weight: 600;
+    }
+    .nav-item svg { flex-shrink: 0; }
+    .nav-count {
+      margin-left: auto;
+      background: var(--warm-grey);
+      color: var(--muted);
+      font-size: .7rem;
+      font-weight: 600;
+      padding: .1rem .45rem;
+      border-radius: 10px;
+    }
+    .nav-item.active .nav-count { background: #fde8c1; color: var(--gold); }
+    .sidebar-divider { height: 1px; background: var(--border); margin: .75rem 1.4rem; }
+
+    /* ── MAIN CONTENT ────────────────────────────────────── */
+    .main { flex: 1; padding: 2rem 2.2rem; overflow-x: hidden; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── PAGE HEADER ─────────────────────────────────────── */
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 1.8rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .page-title { font-size: 1.5rem; font-weight: 700; letter-spacing: -.02em; }
+    .page-sub { font-size: .88rem; color: var(--muted); margin-top: .2rem; }
+
+    /* ── BUTTONS ─────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .6rem 1.2rem;
+      border-radius: var(--radius);
+      font-size: .88rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all .18s;
+      font-family: 'Inter', sans-serif;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--gold); color: var(--ink); }
+    .btn-primary:hover { background: var(--gold-lt); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(232,149,42,.35); }
+    .btn-outline { background: transparent; color: var(--ink); border: 1.5px solid var(--border); }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); background: #fff8ed; }
+    .btn-danger { background: #fdecea; color: var(--rust); border: 1.5px solid #f5c6c0; }
+    .btn-danger:hover { background: var(--rust); color: white; }
+    .btn-sm { padding: .38rem .85rem; font-size: .82rem; }
+    .btn-icon { padding: .5rem; border-radius: var(--radius); background: var(--warm-grey); border: none; cursor: pointer; color: var(--muted); transition: all .18s; display:inline-flex;align-items:center; }
+    .btn-icon:hover { background: var(--gold); color: var(--ink); }
+
+    /* ── STAT CARDS ──────────────────────────────────────── */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.1rem; margin-bottom: 2rem; }
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.3rem 1.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .stat-card.gold::after  { background: linear-gradient(90deg, var(--gold), var(--gold-lt)); }
+    .stat-card.rust::after  { background: linear-gradient(90deg, var(--rust), #e07050); }
+    .stat-card.sage::after  { background: linear-gradient(90deg, var(--sage), #5aaf8a); }
+    .stat-card.ink::after   { background: linear-gradient(90deg, #4a3c2a, #7a6e5f); }
+    .stat-label { font-size: .78rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); margin-bottom: .5rem; }
+    .stat-value { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--ink); letter-spacing: -.03em; }
+    .stat-delta { font-size: .78rem; margin-top: .35rem; display: flex; align-items: center; gap: .25rem; }
+    .delta-up { color: var(--sage); }
+    .delta-down { color: var(--rust); }
+
+    /* ── CARDS ───────────────────────────────────────────── */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.2rem;
+      box-shadow: var(--shadow);
+    }
+    .card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.2rem;
+      flex-wrap: wrap; gap: .75rem;
+    }
+    .card-title { font-size: 1rem; font-weight: 700; }
+
+    /* ── TABLE ───────────────────────────────────────────── */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    thead th {
+      text-align: left;
+      padding: .65rem 1rem;
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--warm-grey);
+      border-bottom: 1px solid var(--border);
+    }
+    thead th:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+    thead th:last-child  { border-radius: 0 var(--radius) var(--radius) 0; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .14s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--cream); }
+    td { padding: .85rem 1rem; vertical-align: middle; }
+
+    /* ── BADGES ──────────────────────────────────────────── */
+    .badge {
+      display: inline-flex; align-items: center; gap: .3rem;
+      padding: .22rem .65rem;
+      border-radius: 20px;
+      font-size: .73rem;
+      font-weight: 600;
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .badge-success { background: var(--sage-lt); color: var(--sage); }
+    .badge-success .badge-dot { background: var(--sage); }
+    .badge-warning { background: #fff8ed; color: #b87a10; }
+    .badge-warning .badge-dot { background: var(--gold); }
+    .badge-danger  { background: #fdecea; color: var(--rust); }
+    .badge-danger .badge-dot  { background: var(--rust); }
+    .badge-neutral { background: var(--warm-grey); color: var(--muted); }
+    .badge-neutral .badge-dot { background: var(--muted); }
+
+    /* ── SEARCH / FILTER BAR ─────────────────────────────── */
+    .toolbar { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .search-wrap { position: relative; flex: 1; min-width: 200px; max-width: 340px; }
+    .search-wrap svg { position: absolute; left: .75rem; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+    .search-input {
+      width: 100%;
+      padding: .58rem .75rem .58rem 2.3rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-size: .88rem;
+      font-family: 'Inter', sans-serif;
+      background: var(--white);
+      color: var(--ink);
+      outline: none;
+      transition: border-color .18s;
+    }
+    .search-input:focus { border-color: var(--gold); }
+    .select-filter {
+      padding: .55rem .9rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-size: .86rem;
+      font-family: 'Inter', sans-serif;
+      background: var(--white);
+      color: var(--ink);
+      cursor: pointer;
+      outline: none;
+    }
+    .select-filter:focus { border-color: var(--gold); }
+
+    /* ── PRODUCT GRID ────────────────────────────────────── */
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.1rem; }
+    .product-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: box-shadow .18s, transform .18s;
+      cursor: pointer;
+    }
+    .product-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+    .product-thumb {
+      height: 160px;
+      background: var(--warm-grey);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem;
+      position: relative;
+    }
+    .product-thumb-badge {
+      position: absolute; top: .6rem; right: .6rem;
+    }
+    .product-info { padding: 1rem; }
+    .product-name { font-weight: 600; font-size: .92rem; margin-bottom: .3rem; }
+    .product-meta { font-size: .8rem; color: var(--muted); display: flex; align-items: center; gap: .5rem; margin-bottom: .7rem; }
+    .product-price { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--gold); }
+    .product-actions { display: flex; gap: .5rem; margin-top: .75rem; }
+
+    /* ── FORM ────────────────────────────────────────────── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: .82rem; font-weight: 600; color: var(--ink); }
+    input[type=text], input[type=email], input[type=number], input[type=tel],
+    input[type=url], textarea, select.form-select {
+      padding: .6rem .85rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-size: .9rem;
+      font-family: 'Inter', sans-serif;
+      background: var(--white);
+      color: var(--ink);
+      outline: none;
+      transition: border-color .18s, box-shadow .18s;
+    }
+    input:focus, textarea:focus, select.form-select:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(232,149,42,.12);
+    }
+    textarea { resize: vertical; min-height: 90px; }
+    .form-hint { font-size: .76rem; color: var(--muted); }
+
+    /* ── UPLOAD ZONE ─────────────────────────────────────── */
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all .18s;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+    .upload-zone:hover { border-color: var(--gold); background: #fff8ed; color: var(--gold); }
+    .upload-zone .upload-icon { font-size: 2rem; margin-bottom: .5rem; }
+
+    /* ── ORDERS / ORDER ROW ──────────────────────────────── */
+    .order-id { font-family: 'Syne', sans-serif; font-weight: 700; font-size: .88rem; }
+    .customer-cell { display: flex; align-items: center; gap: .6rem; }
+    .customer-avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f5b952 0%, #c04b1e 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 700; font-size: .7rem;
+      flex-shrink: 0;
+    }
+    .amount-cell { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--ink); }
+
+    /* ── PAYOUTS ─────────────────────────────────────────── */
+    .payout-banner {
+      background: linear-gradient(135deg, var(--ink) 0%, #3a2e1e 100%);
+      border-radius: var(--radius-lg);
+      padding: 1.6rem 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.4rem;
+    }
+    .payout-label { color: #9c8f7a; font-size: .8rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: .3rem; }
+    .payout-amount { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--white); letter-spacing: -.04em; }
+    .payout-amount span { color: var(--gold); }
+    .payout-meta { color: #9c8f7a; font-size: .82rem; margin-top: .25rem; }
+
+    /* ── PROFILE / SETTINGS ──────────────────────────────── */
+    .store-hero {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--rust) 100%);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      display: flex; align-items: center; gap: 1.5rem;
+      margin-bottom: 1.4rem;
+      flex-wrap: wrap;
+    }
+    .store-logo {
+      width: 70px; height: 70px;
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem;
+      flex-shrink: 0;
+    }
+    .store-info h2 { font-size: 1.3rem; font-weight: 700; color: white; }
+    .store-info p  { color: rgba(255,255,255,.75); font-size: .88rem; margin-top: .2rem; }
+
+    /* ── TOGGLE ──────────────────────────────────────────── */
+    .toggle-wrap { display: flex; align-items: center; justify-content: space-between; padding: .85rem 0; border-bottom: 1px solid var(--border); }
+    .toggle-wrap:last-child { border-bottom: none; }
+    .toggle-label { font-size: .9rem; font-weight: 500; }
+    .toggle-sub   { font-size: .78rem; color: var(--muted); margin-top: .15rem; }
+    .toggle {
+      position: relative;
+      width: 42px; height: 24px;
+      cursor: pointer;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0;
+      background: var(--border);
+      border-radius: 20px;
+      transition: background .2s;
+    }
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 18px; height: 18px;
+      left: 3px; top: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: transform .2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,.2);
+    }
+    .toggle input:checked + .toggle-slider { background: var(--gold); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
+
+    /* ── CHART PLACEHOLDER ───────────────────────────────── */
+    .mini-chart { height: 80px; display: flex; align-items: flex-end; gap: 4px; padding-top: .5rem; }
+    .bar {
+      flex: 1;
+      background: linear-gradient(to top, var(--gold), var(--gold-lt));
+      border-radius: 4px 4px 0 0;
+      opacity: .7;
+      transition: opacity .2s;
+      cursor: pointer;
+    }
+    .bar:hover { opacity: 1; }
+    .bar.highlight { opacity: 1; }
+
+    /* ── REVIEW CARDS ────────────────────────────────────── */
+    .review-card { padding: 1rem 0; border-bottom: 1px solid var(--border); }
+    .review-card:last-child { border-bottom: none; }
+    .review-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: .5rem; }
+    .reviewer { font-weight: 600; font-size: .9rem; }
+    .stars { color: var(--gold); letter-spacing: .05em; font-size: .9rem; }
+    .review-text { font-size: .88rem; color: var(--muted); line-height: 1.55; }
+    .review-date { font-size: .75rem; color: var(--muted); margin-top: .3rem; }
+
+    /* ── EMPTY STATE ─────────────────────────────────────── */
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted); }
+    .empty-state .icon { font-size: 3rem; margin-bottom: .75rem; }
+    .empty-state p { font-size: .9rem; max-width: 280px; margin: 0 auto .75rem; }
+
+    /* ── MODAL ───────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(26,18,8,.5);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      animation: pop .22s ease;
+    }
+    @keyframes pop { from { transform: scale(.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.3rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-header h3 { font-size: 1rem; font-weight: 700; }
+    .modal-close { background: none; border: none; cursor: pointer; color: var(--muted); padding: .2rem; font-size: 1.2rem; transition: color .15s; }
+    .modal-close:hover { color: var(--rust); }
+    .modal-body { padding: 1.5rem; }
+    .modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: .75rem; }
+
+    /* ── TOAST ───────────────────────────────────────────── */
+    .toast-wrap { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 300; display: flex; flex-direction: column; gap: .5rem; }
+    .toast {
+      background: var(--ink);
+      color: var(--white);
+      padding: .75rem 1.2rem;
+      border-radius: var(--radius);
+      font-size: .86rem;
+      display: flex; align-items: center; gap: .6rem;
+      box-shadow: var(--shadow-lg);
+      animation: slide-up .25s ease;
+      max-width: 320px;
+    }
+    @keyframes slide-up { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .toast.success .t-icon { color: var(--sage); }
+    .toast.warning .t-icon { color: var(--gold); }
+
+    /* ── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .sidebar { width: 56px; padding: 1rem 0; }
+      .sidebar-section-label, .nav-item span, .nav-count { display: none; }
+      .nav-item { justify-content: center; padding: .75rem; }
+      .nav-item { border-left: none; border-bottom: 3px solid transparent; }
+      .nav-item.active { border-bottom-color: var(--gold); border-left-color: transparent; }
+      .main { padding: 1.2rem; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .product-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-dot"></span>
+    Bona<span>Markets</span>
+  </div>
+  <div class="topbar-right">
+    <span class="topbar-badge">Vendor Portal</span>
+    <button class="notif-btn" onclick="showToast('You have 3 new orders!','warning')">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="dot"></span>
+    </button>
+    <div class="topbar-avatar" title="Karabelo">AO</div>
+  </div>
+</header>
+
+<div class="shell">
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <span class="sidebar-section-label">Overview</span>
+  <a class="nav-item active" onclick="navigate('dashboard',this)">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    <span>Dashboard</span>
+  </a>
+
+  <span class="sidebar-section-label">Store</span>
+  <a class="nav-item" onclick="navigate('products',this)">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+    <span>Products</span>
+    <span class="nav-count">24</span>
+  </a>
+  <a class="nav-item" onclick="navigate('add-product',this)">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    <span>Add Product</span>
+  </a>
+  <a class="nav-item" onclick="navigate('orders',this)">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    <span>Orders</span>
+    <span class="nav-count">7</span>
+  </a>
+
+  <div class="sidebar-divider"></div>
+  <span class="sidebar-section-label">Finance</span>
+  <a class="nav-item" onclick="navigate('payouts',this)">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+    <span>Payouts</span>
+  </a>
+
+  <div class="sidebar-divider"></div>
+  <span class="sidebar-section-label">Account</span>
+  <a class="nav-item" onclick="navigate('reviews',this)">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    <span>Reviews</span>
+    <span class="nav-count">12</span>
+  </a>
+  <a class="nav-item" onclick="navigate('settings',this)">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    <span>Settings</span>
+  </a>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ───────── DASHBOARD ───────── -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Good morning, Karabelo 👋</h1>
+        <p class="page-sub">Here's what's happening with your store today.</p>
+      </div>
+      <button class="btn btn-primary" onclick="navigate('add-product', document.querySelector('[onclick*=add-product]'))">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Product
+      </button>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card gold">
+        <div class="stat-label">Total Revenue</div>
+        <div class="stat-value">R 48,290</div>
+        <div class="stat-delta delta-up">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+          +12.4% this month
+        </div>
+      </div>
+      <div class="stat-card rust">
+        <div class="stat-label">Active Orders</div>
+        <div class="stat-value">7</div>
+        <div class="stat-delta delta-up">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+          3 awaiting shipment
+        </div>
+      </div>
+      <div class="stat-card sage">
+        <div class="stat-label">Products Listed</div>
+        <div class="stat-value">24</div>
+        <div class="stat-delta delta-up">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+          2 low in stock
+        </div>
+      </div>
+      <div class="stat-card ink">
+        <div class="stat-label">Store Rating</div>
+        <div class="stat-value">4.8 ★</div>
+        <div class="stat-delta delta-up">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+          12 new reviews
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;flex-wrap:wrap;">
+      <div class="card" style="min-width:0">
+        <div class="card-header">
+          <span class="card-title">Sales — Last 7 Days</span>
+          <span style="font-size:.78rem;color:var(--muted)">June 2025</span>
+        </div>
+        <div class="mini-chart" id="sales-chart"></div>
+        <div style="display:flex;justify-content:space-between;margin-top:.5rem;font-size:.72rem;color:var(--muted)">
+          <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+        </div>
+      </div>
+
+      <div class="card" style="min-width:0">
+        <div class="card-header">
+          <span class="card-title">Recent Orders</span>
+          <button class="btn btn-outline btn-sm" onclick="navigate('orders', document.querySelector('[onclick*=orders]'))">View all</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Order</th><th>Customer</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="order-id">#BM-0041</span></td>
+                <td><span>Sipho M.</span></td>
+                <td><span class="amount-cell">R 320</span></td>
+                <td><span class="badge badge-warning"><span class="badge-dot"></span>Pending</span></td>
+              </tr>
+              <tr>
+                <td><span class="order-id">#BM-0040</span></td>
+                <td><span>Zanele K.</span></td>
+                <td><span class="amount-cell">R 860</span></td>
+                <td><span class="badge badge-success"><span class="badge-dot"></span>Shipped</span></td>
+              </tr>
+              <tr>
+                <td><span class="order-id">#BM-0039</span></td>
+                <td><span>Kwame D.</span></td>
+                <td><span class="amount-cell">R 1,240</span></td>
+                <td><span class="badge badge-success"><span class="badge-dot"></span>Delivered</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── PRODUCTS ───────── -->
+  <div class="page" id="page-products">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">My Products</h1>
+        <p class="page-sub">Manage your listed items and inventory.</p>
+      </div>
+      <button class="btn btn-primary" onclick="navigate('add-product', document.querySelector('[onclick*=add-product]'))">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Product
+      </button>
+    </div>
+
+    <div class="toolbar">
+      <div class="search-wrap">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-input" type="text" placeholder="Search products…" oninput="filterProducts(this.value)"/>
+      </div>
+      <select class="select-filter" onchange="filterProducts()">
+        <option>All Categories</option>
+        <option>Textiles & Fashion</option>
+        <option>Handcrafts</option>
+        <option>Food & Spices</option>
+        <option>Jewellery</option>
+      </select>
+      <select class="select-filter">
+        <option>All Status</option>
+        <option>Active</option>
+        <option>Out of Stock</option>
+        <option>Draft</option>
+      </select>
+    </div>
+
+    <div class="product-grid" id="product-grid"></div>
+  </div>
+
+  <!-- ───────── ADD PRODUCT ───────── -->
+  <div class="page" id="page-add-product">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Add New Product</h1>
+        <p class="page-sub">List a new item in your store.</p>
+      </div>
+      <button class="btn btn-outline" onclick="navigate('products', document.querySelector('[onclick*=products]'))">← Back to Products</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 340px;gap:1.4rem;align-items:start;flex-wrap:wrap;">
+      <div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Product Details</span></div>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>Product Name</label>
+              <input type="text" placeholder="e.g. Kente Cloth Tote Bag" id="prod-name"/>
+            </div>
+            <div class="form-group full">
+              <label>Description</label>
+              <textarea placeholder="Describe your product — materials, origin, use…" id="prod-desc"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <select class="form-select" id="prod-cat">
+                <option value="">Select category</option>
+                <option>Textiles & Fashion</option>
+                <option>Handcrafts</option>
+                <option>Food & Spices</option>
+                <option>Jewellery</option>
+                <option>Art & Decor</option>
+                <option>Beauty & Wellness</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tags</label>
+              <input type="text" placeholder="handmade, african, cotton…" id="prod-tags"/>
+              <span class="form-hint">Separate with commas</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span class="card-title">Pricing & Inventory</span></div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Price (ZAR)</label>
+              <input type="number" placeholder="0.00" id="prod-price"/>
+            </div>
+            <div class="form-group">
+              <label>Compare-at Price</label>
+              <input type="number" placeholder="0.00" id="prod-compare"/>
+              <span class="form-hint">Optional — shows a strikethrough price</span>
+            </div>
+            <div class="form-group">
+              <label>Stock Quantity</label>
+              <input type="number" placeholder="0" id="prod-stock"/>
+            </div>
+            <div class="form-group">
+              <label>SKU</label>
+              <input type="text" placeholder="BM-SKU-001" id="prod-sku"/>
+            </div>
+            <div class="form-group">
+              <label>Weight (kg)</label>
+              <input type="number" placeholder="0.0" id="prod-weight"/>
+            </div>
+            <div class="form-group">
+              <label>Country of Origin</label>
+              <input type="text" placeholder="e.g. Ghana" id="prod-origin"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Product Images</span></div>
+          <div class="upload-zone" onclick="showToast('File picker would open here','warning')">
+            <div class="upload-icon">🖼️</div>
+            <strong>Drop images here</strong>
+            <p style="margin-top:.3rem;font-size:.8rem">PNG, JPG up to 10 MB each</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span class="card-title">Status & Visibility</span></div>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Listing Status</label>
+            <select class="form-select" id="prod-status">
+              <option>Active — visible to buyers</option>
+              <option>Draft — save for later</option>
+              <option>Archived</option>
+            </select>
+          </div>
+          <div class="toggle-wrap">
+            <div>
+              <div class="toggle-label">Feature in store</div>
+              <div class="toggle-sub">Pin to your storefront homepage</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-wrap">
+            <div>
+              <div class="toggle-label">Allow reviews</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+          <button class="btn btn-primary" style="flex:1" onclick="saveProduct()">Save Product</button>
+          <button class="btn btn-outline" onclick="showToast('Draft saved','warning')">Save Draft</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── ORDERS ───────── -->
+  <div class="page" id="page-orders">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Orders</h1>
+        <p class="page-sub">Track and manage incoming customer orders.</p>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="search-wrap">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-input" type="text" placeholder="Search by order or customer…"/>
+      </div>
+      <select class="select-filter">
+        <option>All Orders</option>
+        <option>Pending</option>
+        <option>Shipped</option>
+        <option>Delivered</option>
+        <option>Cancelled</option>
+      </select>
+    </div>
+
+    <div class="card" style="padding:0">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Products</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── PAYOUTS ───────── -->
+  <div class="page" id="page-payouts">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Payouts</h1>
+        <p class="page-sub">Track earnings and request withdrawals.</p>
+      </div>
+      <button class="btn btn-primary" onclick="openWithdrawModal()">Request Payout</button>
+    </div>
+
+    <div class="payout-banner">
+      <div>
+        <div class="payout-label">Available Balance</div>
+        <div class="payout-amount"><span>R</span> 12,450.00</div>
+        <div class="payout-meta">Next automatic payout · 30 June 2025</div>
+      </div>
+      <div style="text-align:right">
+        <div class="payout-label">Total Earned (All Time)</div>
+        <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;color:white">R 48,290.00</div>
+        <div class="payout-meta">Commission (8%) · R 3,863.20 paid</div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card gold">
+        <div class="stat-label">This Month</div>
+        <div class="stat-value">R 8,740</div>
+        <div class="stat-delta delta-up">↑ 12.4% vs last month</div>
+      </div>
+      <div class="stat-card sage">
+        <div class="stat-label">Pending Clearance</div>
+        <div class="stat-value">R 2,100</div>
+        <div class="stat-delta">Clears in 3–5 days</div>
+      </div>
+      <div class="stat-card ink">
+        <div class="stat-label">Last Payout</div>
+        <div class="stat-value">R 6,200</div>
+        <div class="stat-delta">31 May 2025</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">Payout History</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Reference</th><th>Method</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>31 May 2025</td><td style="font-family:'Syne',sans-serif;font-weight:700">#PAY-0019</td><td>FNB Bank Account</td><td class="amount-cell">R 6,200.00</td><td><span class="badge badge-success"><span class="badge-dot"></span>Paid</span></td></tr>
+            <tr><td>30 Apr 2025</td><td style="font-family:'Syne',sans-serif;font-weight:700">#PAY-0018</td><td>FNB Bank Account</td><td class="amount-cell">R 5,800.00</td><td><span class="badge badge-success"><span class="badge-dot"></span>Paid</span></td></tr>
+            <tr><td>31 Mar 2025</td><td style="font-family:'Syne',sans-serif;font-weight:700">#PAY-0017</td><td>FNB Bank Account</td><td class="amount-cell">R 4,250.00</td><td><span class="badge badge-success"><span class="badge-dot"></span>Paid</span></td></tr>
+            <tr><td>28 Feb 2025</td><td style="font-family:'Syne',sans-serif;font-weight:700">#PAY-0016</td><td>FNB Bank Account</td><td class="amount-cell">R 3,100.00</td><td><span class="badge badge-success"><span class="badge-dot"></span>Paid</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── REVIEWS ───────── -->
+  <div class="page" id="page-reviews">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Customer Reviews</h1>
+        <p class="page-sub">See what buyers are saying about your products.</p>
+      </div>
+    </div>
+
+    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="stat-card gold">
+        <div class="stat-label">Overall Rating</div>
+        <div class="stat-value">4.8</div>
+        <div class="stat-delta">★★★★★ (12 reviews)</div>
+      </div>
+      <div class="stat-card sage">
+        <div class="stat-label">5 Stars</div>
+        <div class="stat-value">9</div>
+        <div class="stat-delta delta-up">75% of reviews</div>
+      </div>
+      <div class="stat-card ink">
+        <div class="stat-label">4 Stars</div>
+        <div class="stat-value">2</div>
+      </div>
+      <div class="stat-card rust">
+        <div class="stat-label">3 Stars or Below</div>
+        <div class="stat-value">1</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">All Reviews</span></div>
+      <div class="review-card">
+        <div class="review-header">
+          <span class="reviewer">Zanele K.</span>
+          <span class="stars">★★★★★</span>
+        </div>
+        <p class="review-text">The quality of the kente tote is absolutely stunning. Ships fast and the packaging was beautiful — I'll be ordering again!</p>
+        <div class="review-date">12 June 2025 · Kente Cloth Tote Bag</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <span class="reviewer">Sipho M.</span>
+          <span class="stars">★★★★★</span>
+        </div>
+        <p class="review-text">Authentic, well-made, arrived in perfect condition. Bona Markets is my go-to for African crafts now.</p>
+        <div class="review-date">9 June 2025 · Beaded Ndebele Necklace</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <span class="reviewer">Kwame D.</span>
+          <span class="stars">★★★★☆</span>
+        </div>
+        <p class="review-text">Great product, slight delay on shipping but vendor communicated proactively. Very happy with the item itself.</p>
+        <div class="review-date">5 June 2025 · Moroccan Leather Pouch</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <span class="reviewer">Amina B.</span>
+          <span class="stars">★★★☆☆</span>
+        </div>
+        <p class="review-text">Item was as described but the colour was slightly different from the photos. Would suggest better photography.</p>
+        <div class="review-date">28 May 2025 · Ankara Print Cushion Cover</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── SETTINGS ───────── -->
+  <div class="page" id="page-settings">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Store Settings</h1>
+        <p class="page-sub">Manage your vendor profile and preferences.</p>
+      </div>
+      <button class="btn btn-primary" onclick="showToast('Settings saved!','success')">Save Changes</button>
+    </div>
+
+    <div class="store-hero">
+      <div class="store-logo">🛍️</div>
+      <div class="store-info">
+        <h2>Amara's Artisan Market</h2>
+        <p>Member since January 2024 · Johannesburg, South Africa</p>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;align-items:start">
+      <div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Store Profile</span></div>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>Store Name</label>
+              <input type="text" value="Amara's Artisan Market"/>
+            </div>
+            <div class="form-group full">
+              <label>Store Bio</label>
+              <textarea>Handcrafted African goods made with love and tradition. Every piece tells a story.</textarea>
+            </div>
+            <div class="form-group">
+              <label>Phone</label>
+              <input type="tel" value="+27 82 456 7890"/>
+            </div>
+            <div class="form-group">
+              <label>City</label>
+              <input type="text" value="Johannesburg"/>
+            </div>
+            <div class="form-group full">
+              <label>Store URL</label>
+              <input type="url" value="bonamarkets.co.za/amara"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Banking Details</span></div>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>Account Holder Name</label>
+              <input type="text" value="Amara Osei"/>
+            </div>
+            <div class="form-group">
+              <label>Bank Name</label>
+              <input type="text" value="FNB"/>
+            </div>
+            <div class="form-group">
+              <label>Account Number</label>
+              <input type="text" value="••••••7823"/>
+            </div>
+            <div class="form-group">
+              <label>Branch Code</label>
+              <input type="text" value="250655"/>
+            </div>
+            <div class="form-group">
+              <label>Account Type</label>
+              <select class="form-select"><option>Cheque / Current</option><option>Savings</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span class="card-title">Notifications</span></div>
+          <div class="toggle-wrap">
+            <div>
+              <div class="toggle-label">New order alerts</div>
+              <div class="toggle-sub">Email & SMS when an order comes in</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-wrap">
+            <div>
+              <div class="toggle-label">Payout confirmations</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-wrap">
+            <div>
+              <div class="toggle-label">Review notifications</div>
+            </div>
+            <label class="toggle"><input type="checkbox"/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-wrap">
+            <div>
+              <div class="toggle-label">Marketing updates</div>
+              <div class="toggle-sub">Tips and promotions from Bona Markets</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<!-- WITHDRAW MODAL -->
+<div class="modal-overlay" id="withdraw-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Request Payout</h3>
+      <button class="modal-close" onclick="closeWithdrawModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:1rem">
+        <label>Withdrawal Amount (ZAR)</label>
+        <input type="number" placeholder="Enter amount" id="withdraw-amount"/>
+        <span class="form-hint">Available balance: R 12,450.00</span>
+      </div>
+      <div class="form-group">
+        <label>Destination Account</label>
+        <select class="form-select">
+          <option>FNB Cheque ••••7823</option>
+        </select>
+      </div>
+      <div style="background:var(--cream);border-radius:var(--radius);padding:.9rem 1rem;margin-top:1rem;font-size:.83rem;color:var(--muted);line-height:1.6">
+        Payouts are processed within 1–3 business days. An 8% platform commission is already deducted from your available balance.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeWithdrawModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitWithdraw()">Confirm Request</button>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER DETAIL MODAL -->
+<div class="modal-overlay" id="order-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="order-modal-title">Order Details</h3>
+      <button class="modal-close" onclick="closeOrderModal()">✕</button>
+    </div>
+    <div class="modal-body" id="order-modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeOrderModal()">Close</button>
+      <button class="btn btn-primary" onclick="markShipped()">Mark as Shipped</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+  /* ── DATA ───────────────────────────────── */
+  const PRODUCTS = [
+    { id: 1, name: 'Kente Cloth Tote Bag', cat: 'Textiles & Fashion', price: 320, stock: 14, status: 'active', emoji: '👜' },
+    { id: 2, name: 'Beaded Ndebele Necklace', cat: 'Jewellery', price: 580, stock: 6, status: 'active', emoji: '📿' },
+    { id: 3, name: 'Moroccan Leather Pouch', cat: 'Handcrafts', price: 460, stock: 2, status: 'active', emoji: '🟤' },
+    { id: 4, name: 'Ankara Print Cushion Cover', cat: 'Textiles & Fashion', price: 245, stock: 20, status: 'active', emoji: '🛋️' },
+    { id: 5, name: 'Rooibos & Baobab Tea Blend', cat: 'Food & Spices', price: 120, stock: 50, status: 'active', emoji: '🍵' },
+    { id: 6, name: 'Hand-Carved Soapstone Bowl', cat: 'Handcrafts', price: 850, stock: 0, status: 'out_of_stock', emoji: '🪨' },
+    { id: 7, name: 'Shea Butter Body Cream', cat: 'Beauty & Wellness', price: 195, stock: 30, status: 'active', emoji: '🧴' },
+    { id: 8, name: 'Maasai Beaded Bracelet Set', cat: 'Jewellery', price: 340, stock: 12, status: 'active', emoji: '💛' },
+  ];
+
+  const ORDERS = [
+    { id: '#BM-0041', customer: 'Sipho Molefe', initials:'SM', product: 'Kente Cloth Tote Bag', qty:1, date: '12 Jun 2025', amount: 320, status: 'pending' },
+    { id: '#BM-0040', customer: 'Zanele Khumalo', initials:'ZK', product: 'Beaded Ndebele Necklace', qty:1, date: '11 Jun 2025', amount: 860, status: 'shipped' },
+    { id: '#BM-0039', customer: 'Kwame Darko', initials:'KD', product: 'Moroccan Leather Pouch', qty:2, date: '10 Jun 2025', amount: 1240, status: 'delivered' },
+    { id: '#BM-0038', customer: 'Amina Bah', initials:'AB', product: 'Rooibos & Baobab Tea Blend', qty:3, date: '09 Jun 2025', amount: 360, status: 'delivered' },
+    { id: '#BM-0037', customer: 'Tendai Moyo', initials:'TM', product: 'Ankara Print Cushion Cover', qty:2, date: '08 Jun 2025', amount: 490, status: 'pending' },
+    { id: '#BM-0036', customer: 'Fatou Diallo', initials:'FD', product: 'Shea Butter Body Cream', qty:1, date: '07 Jun 2025', amount: 195, status: 'cancelled' },
+    { id: '#BM-0035', customer: 'Chidi Okafor', initials:'CO', product: 'Maasai Beaded Bracelet Set', qty:1, date: '06 Jun 2025', amount: 340, status: 'shipped' },
+  ];
+
+  const SALES = [42, 68, 55, 90, 74, 115, 88];
+
+  /* ── NAVIGATION ─────────────────────────── */
+  function navigate(page, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    if (el) el.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ── PRODUCTS ────────────────────────────── */
+  function renderProducts(list) {
+    const grid = document.getElementById('product-grid');
+    if (!list.length) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="icon">📦</div><p>No products found. Try a different search.</p></div>`;
+      return;
+    }
+    grid.innerHTML = list.map(p => `
+      <div class="product-card">
+        <div class="product-thumb" style="background:${p.stock===0?'#fdecea':'var(--warm-grey)'}">
+          <span>${p.emoji}</span>
+          <span class="product-thumb-badge">
+            ${p.stock === 0
+              ? '<span class="badge badge-danger">Out of Stock</span>'
+              : p.stock <= 3
+              ? '<span class="badge badge-warning">Low Stock</span>'
+              : '<span class="badge badge-success">Active</span>'}
+          </span>
+        </div>
+        <div class="product-info">
+          <div class="product-name">${p.name}</div>
+          <div class="product-meta">
+            <span>${p.cat}</span>·
+            <span>${p.stock} in stock</span>
+          </div>
+          <div class="product-price">R ${p.price.toLocaleString()}</div>
+          <div class="product-actions">
+            <button class="btn btn-outline btn-sm" onclick="showToast('Opening editor for ${p.name.replace(/'/g,'&#39;')}','warning')">Edit</button>
+            <button class="btn-icon" onclick="showToast('${p.name.replace(/'/g,'&#39;')} duplicated','success')" title="Duplicate">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+            <button class="btn-icon" style="margin-left:auto" onclick="showToast('${p.name.replace(/'/g,'&#39;')} removed','warning')" title="Delete">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function filterProducts(q = '') {
+    const filtered = q
+      ? PRODUCTS.filter(p => p.name.toLowerCase().includes(q.toLowerCase()) || p.cat.toLowerCase().includes(q.toLowerCase()))
+      : PRODUCTS;
+    renderProducts(filtered);
+  }
+
+  /* ── ORDERS ──────────────────────────────── */
+  function renderOrders() {
+    const tbody = document.getElementById('orders-tbody');
+    const statusMap = {
+      pending:   '<span class="badge badge-warning"><span class="badge-dot"></span>Pending</span>',
+      shipped:   '<span class="badge badge-neutral"><span class="badge-dot"></span>Shipped</span>',
+      delivered: '<span class="badge badge-success"><span class="badge-dot"></span>Delivered</span>',
+      cancelled: '<span class="badge badge-danger"><span class="badge-dot"></span>Cancelled</span>',
+    };
+    tbody.innerHTML = ORDERS.map(o => `
+      <tr>
+        <td><span class="order-id">${o.id}</span></td>
+        <td>
+          <div class="customer-cell">
+            <div class="customer-avatar">${o.initials}</div>
+            ${o.customer}
+          </div>
+        </td>
+        <td>${o.product} × ${o.qty}</td>
+        <td style="color:var(--muted);font-size:.84rem">${o.date}</td>
+        <td><span class="amount-cell">R ${o.amount.toLocaleString()}</span></td>
+        <td>${statusMap[o.status]}</td>
+        <td>
+          <button class="btn btn-outline btn-sm" onclick="openOrderModal('${o.id}')">View</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  /* ── CHART ───────────────────────────────── */
+  function renderChart() {
+    const chart = document.getElementById('sales-chart');
+    const max = Math.max(...SALES);
+    chart.innerHTML = SALES.map((v, i) => `
+      <div class="bar ${i === 5 ? 'highlight' : ''}" style="height:${Math.round((v/max)*100)}%" title="R ${v*100}"></div>
+    `).join('');
+  }
+
+  /* ── MODAL: ORDER ────────────────────────── */
+  function openOrderModal(id) {
+    const o = ORDERS.find(x => x.id === id);
+    document.getElementById('order-modal-title').textContent = 'Order ' + o.id;
+    document.getElementById('order-modal-body').innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem">
+        <div><div style="font-size:.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">Customer</div><div style="font-weight:600">${o.customer}</div></div>
+        <div><div style="font-size:.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">Date</div><div>${o.date}</div></div>
+        <div><div style="font-size:.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">Product</div><div>${o.product}</div></div>
+        <div><div style="font-size:.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">Qty</div><div>${o.qty}</div></div>
+        <div><div style="font-size:.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">Amount</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:var(--gold)">R ${o.amount.toLocaleString()}</div></div>
+        <div><div style="font-size:.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">Status</div><div>${o.status}</div></div>
+      </div>
+      <div style="background:var(--cream);border-radius:var(--radius);padding:.9rem 1rem;">
+        <div style="font-size:.82rem;font-weight:600;margin-bottom:.3rem">Shipping Address</div>
+        <div style="font-size:.85rem;color:var(--muted)">12 Vilakazi Street, Soweto, Johannesburg, 1804</div>
+      </div>
+    `;
+    document.getElementById('order-modal').classList.add('open');
+  }
+  function closeOrderModal() { document.getElementById('order-modal').classList.remove('open'); }
+  function markShipped() {
+    closeOrderModal();
+    showToast('Order marked as shipped!', 'success');
+  }
+
+  /* ── MODAL: WITHDRAW ─────────────────────── */
+  function openWithdrawModal() { document.getElementById('withdraw-modal').classList.add('open'); }
+  function closeWithdrawModal() { document.getElementById('withdraw-modal').classList.remove('open'); }
+  function submitWithdraw() {
+    const amt = document.getElementById('withdraw-amount').value;
+    if (!amt || amt < 100) { showToast('Enter a valid amount (min R 100)', 'warning'); return; }
+    closeWithdrawModal();
+    showToast('Payout request submitted!', 'success');
+  }
+
+  /* ── SAVE PRODUCT ────────────────────────── */
+  function saveProduct() {
+    const name = document.getElementById('prod-name').value;
+    if (!name.trim()) { showToast('Please enter a product name', 'warning'); return; }
+    showToast(`"${name}" listed successfully!`, 'success');
+    navigate('products', document.querySelector('[onclick*=products]'));
+  }
+
+  /* ── TOAST ───────────────────────────────── */
+  function showToast(msg, type = 'success') {
+    const wrap = document.getElementById('toast-wrap');
+    const icons = { success: '✓', warning: '!' };
+    const el = document.createElement('div');
+    el.className = `toast ${type}`;
+    el.innerHTML = `<span class="t-icon">${icons[type]}</span><span>${msg}</span>`;
+    wrap.appendChild(el);
+    setTimeout(() => el.remove(), 3200);
+  }
+
+  /* ── CLOSE MODAL ON OVERLAY CLICK ─────────── */
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+  });
+
+  /* ── INIT ────────────────────────────────── */
+  renderProducts(PRODUCTS);
+  renderOrders();
+  renderChart();
+</script>
+</body>
+</html>
