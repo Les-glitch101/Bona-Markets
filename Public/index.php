@@ -1,3 +1,52 @@
+<?php
+// Start session to check login status and show logout messages
+session_start();
+
+// Check if logout success message should be shown
+$logoutMessage = '';
+if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
+    $logoutMessage = '<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-4">
+                        <div class="flex items-center gap-2">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span>You have been successfully logged out.</span>
+                        </div>
+                      </div>';
+}
+
+// Check if login success message should be shown (from future login.php)
+$loginMessage = '';
+if (isset($_GET['login']) && $_GET['login'] === 'success') {
+    $loginMessage = '<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-4">
+                        <div class="flex items-center gap-2">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span>Welcome back! You are now logged in.</span>
+                        </div>
+                      </div>';
+}
+
+// Check if registration success message should be shown
+$registerMessage = '';
+if (isset($_GET['registered']) && $_GET['registered'] === 'success') {
+    $registerMessage = '<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-4">
+                            <div class="flex items-center gap-2">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span>Account created successfully! Please log in.</span>
+                            </div>
+                          </div>';
+}
+
+// Get user info from session (if logged in)
+$isLoggedIn = isset($_SESSION['user_id']);
+$userEmail = $isLoggedIn ? $_SESSION['email'] : '';
+$userRole = $isLoggedIn ? $_SESSION['role'] : '';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +61,6 @@
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
-        /* Smooth hover transitions */
         .product-card {
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
@@ -20,7 +68,6 @@
             transform: translateY(-4px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
         }
-        /* Hide number input spinners on quantity */
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
             opacity: 0.5;
@@ -34,27 +81,40 @@
         <div class="container mx-auto px-4 py-3">
             <div class="flex justify-between items-center">
                 <!-- Logo -->
-                <a href="#" class="text-2xl md:text-3xl font-bold text-blue-600 tracking-tight">
+                <a href="index.php" class="text-2xl md:text-3xl font-bold text-blue-600 tracking-tight">
                     Bona Markets
                 </a>
 
-                <!-- Desktop Menu (hidden on mobile) -->
+                <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#" class="text-gray-600 hover:text-blue-600 font-medium">Shop</a>
+                    <a href="index.php" class="text-gray-600 hover:text-blue-600 font-medium">Shop</a>
                     <a href="#" class="text-gray-600 hover:text-blue-600 font-medium">Categories</a>
                     <a href="#" class="text-gray-600 hover:text-blue-600 font-medium">About</a>
                     <a href="#" class="text-gray-600 hover:text-blue-600 font-medium">Contact</a>
                 </div>
 
-                <!-- Desktop Auth Buttons -->
+                <!-- Desktop Auth Buttons (dynamic based on login status) -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">Login</a>
-                    <a href="#" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition">
-                        Sign Up
-                    </a>
+                    <?php if ($isLoggedIn): ?>
+                        <?php if ($userRole === 'vendor'): ?>
+                            <a href="vendor/dashboard.php" class="text-gray-600 hover:text-blue-600 font-medium">Vendor Dashboard</a>
+                        <?php endif; ?>
+                        <?php if ($userRole === 'admin'): ?>
+                            <a href="admin/dashboard.php" class="text-gray-600 hover:text-blue-600 font-medium">Admin Panel</a>
+                        <?php endif; ?>
+                        <a href="cart/index.php" class="text-gray-600 hover:text-blue-600 font-medium">Cart 🛒</a>
+                        <a href="orders/index.php" class="text-gray-600 hover:text-blue-600 font-medium">Orders</a>
+                        <span class="text-gray-600">👋 <?= htmlspecialchars($userEmail) ?></span>
+                        <a href="logout.php" class="text-red-500 hover:text-red-700 font-medium">Logout</a>
+                    <?php else: ?>
+                        <a href="login.php" class="text-gray-600 hover:text-blue-600 font-medium">Login</a>
+                        <a href="register.php" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Sign Up
+                        </a>
+                    <?php endif; ?>
                 </div>
 
-                <!-- Mobile Menu Button (hamburger) -->
+                <!-- Mobile Menu Button -->
                 <button id="mobileMenuBtn" class="md:hidden text-gray-600 focus:outline-none">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -62,15 +122,28 @@
                 </button>
             </div>
 
-            <!-- Mobile Dropdown Menu (hidden by default) -->
+            <!-- Mobile Dropdown Menu -->
             <div id="mobileMenu" class="hidden md:hidden mt-4 pb-3 border-t pt-4 flex flex-col space-y-3">
-                <a href="#" class="text-gray-600 hover:text-blue-600 py-1">Shop</a>
+                <a href="index.php" class="text-gray-600 hover:text-blue-600 py-1">Shop</a>
                 <a href="#" class="text-gray-600 hover:text-blue-600 py-1">Categories</a>
                 <a href="#" class="text-gray-600 hover:text-blue-600 py-1">About</a>
                 <a href="#" class="text-gray-600 hover:text-blue-600 py-1">Contact</a>
                 <div class="flex flex-col space-y-2 pt-2">
-                    <a href="#" class="text-blue-600 font-medium py-1">Login</a>
-                    <a href="#" class="bg-blue-600 text-white text-center px-4 py-2 rounded-lg">Sign Up</a>
+                    <?php if ($isLoggedIn): ?>
+                        <?php if ($userRole === 'vendor'): ?>
+                            <a href="vendor/dashboard.php" class="text-gray-600 py-1">Vendor Dashboard</a>
+                        <?php endif; ?>
+                        <?php if ($userRole === 'admin'): ?>
+                            <a href="admin/dashboard.php" class="text-gray-600 py-1">Admin Panel</a>
+                        <?php endif; ?>
+                        <a href="cart/index.php" class="text-gray-600 py-1">Cart 🛒</a>
+                        <a href="orders/index.php" class="text-gray-600 py-1">Orders</a>
+                        <span class="text-gray-600 py-1">👋 <?= htmlspecialchars($userEmail) ?></span>
+                        <a href="logout.php" class="text-red-500 py-1">Logout</a>
+                    <?php else: ?>
+                        <a href="login.php" class="text-gray-600 hover:text-blue-600 py-1">Login</a>
+                        <a href="register.php" class="bg-blue-600 text-white text-center px-4 py-2 rounded-lg">Sign Up</a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -78,6 +151,15 @@
 
     <!-- ========== MAIN CONTENT ========== -->
     <main>
+
+        <!-- Success/Error Messages -->
+        <div class="container mx-auto px-4 pt-6">
+            <?php 
+            echo $logoutMessage;
+            echo $loginMessage;
+            echo $registerMessage;
+            ?>
+        </div>
 
         <!-- Hero Banner -->
         <section class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
@@ -92,7 +174,7 @@
                     <a href="#" class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
                         Start Shopping
                     </a>
-                    <a href="#" class="border border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition">
+                    <a href="vendor/apply.php" class="border border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition">
                         Become a Vendor
                     </a>
                 </div>
@@ -121,6 +203,24 @@
                 </button>
             </div>
         </div>
+
+        <!-- Welcome Message for Logged-in Users -->
+        <?php if ($isLoggedIn): ?>
+        <div class="container mx-auto px-4 py-6">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p class="text-blue-700">
+                    Welcome back, <strong><?= htmlspecialchars($userEmail) ?></strong>! 
+                    <?php if ($userRole === 'vendor'): ?>
+                        <a href="vendor/dashboard.php" class="text-blue-600 hover:underline ml-2">Go to your vendor dashboard →</a>
+                    <?php elseif ($userRole === 'admin'): ?>
+                        <a href="admin/dashboard.php" class="text-blue-600 hover:underline ml-2">Go to admin panel →</a>
+                    <?php else: ?>
+                        <a href="#" class="text-blue-600 hover:underline ml-2">Start shopping →</a>
+                    <?php endif; ?>
+                </p>
+            </div>
+        </div>
+        <?php endif; ?>
 
         <!-- Featured Products Section -->
         <div class="container mx-auto px-4 py-12">
@@ -256,7 +356,7 @@
                 <p class="text-lg opacity-90 max-w-2xl mx-auto mb-6">
                     Join thousands of vendors who grow their business with us
                 </p>
-                <a href="#" class="inline-block bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                <a href="vendor/apply.php" class="inline-block bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
                     Apply as Vendor →
                 </a>
             </div>
@@ -274,7 +374,7 @@
                 <div>
                     <h4 class="font-semibold mb-3">Shop</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="#" class="hover:text-white">All Products</a></li>
+                        <li><a href="index.php" class="hover:text-white">All Products</a></li>
                         <li><a href="#" class="hover:text-white">Categories</a></li>
                         <li><a href="#" class="hover:text-white">Best Sellers</a></li>
                     </ul>
@@ -282,7 +382,7 @@
                 <div>
                     <h4 class="font-semibold mb-3">Sell</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="#" class="hover:text-white">Become a Vendor</a></li>
+                        <li><a href="vendor/apply.php" class="hover:text-white">Become a Vendor</a></li>
                         <li><a href="#" class="hover:text-white">Vendor Dashboard</a></li>
                         <li><a href="#" class="hover:text-white">Pricing</a></li>
                     </ul>
@@ -302,9 +402,9 @@
         </div>
     </footer>
 
-    <!-- ========== MOBILE MENU JAVASCRIPT ========== -->
+    <!-- ========== JAVASCRIPT ========== -->
     <script>
-        // Toggle mobile menu on hamburger click
+        // Mobile Menu Toggle
         const menuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
 
@@ -314,7 +414,20 @@
             });
         }
 
-        // Simple console log to confirm JS is working
+        // Simple Add to Cart simulation (Week 1 demo)
+        function addToCart(productId) {
+            alert('Demo: Product ' + productId + ' added to cart. (Real cart coming in Week 4)');
+            console.log('Add to cart clicked for product:', productId);
+        }
+
+        // Attach add to cart handlers to all buttons
+        document.querySelectorAll('.product-card button').forEach((btn, index) => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                addToCart(index + 1);
+            });
+        });
+
         console.log('Bona Markets homepage loaded – Week 1 ready!');
     </script>
 </body>
