@@ -11,12 +11,12 @@ Install Node.js, use the prebuilt, easy-to-install one:
 
 # Setup
 
-1. Download the project (the entire file called DATABASE):
+1. Download the project ( You do this by downloading the repository zip file, and then moving the entire file called DATABASE to your desktop):
 
- - Open the folder in terminal by typing this:
-  cd Database
+ - Open the folder in terminal (Command Prompt/CMD) by typing this:
+  cd Desktop\Database
 
-2. Install dependencies by typing this in terminal:
+2. Install dependencies by typing this in that same terminal:
 
 - npm install
 
@@ -24,10 +24,7 @@ Install Node.js, use the prebuilt, easy-to-install one:
 
 - Copy .env.example
 - Rename it to .env
-- Update DATABASE_URL
-
-Example:
-DATABASE_URL="postgresql://postgres:password@localhost:5432/postgres"
+-Keep DATABASEURL the same as it is in the .env file.
 
 ---
 
@@ -37,7 +34,7 @@ Run, in your terminal:
 
 - npx prisma generate
 - npx prisma migrate dev
-- npx prisma db seed
+- npx prisma db seed (this seeds the database with 1 set of temporary data)
 
 ---
 
