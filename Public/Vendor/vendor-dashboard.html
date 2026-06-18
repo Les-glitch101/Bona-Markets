@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bona Markets — Vendor Portal</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="../assets/css/vendor-dashboard.css" />
+</head>
+<body>
+
+    <!-- ============================================================ -->
+    <!-- TOPBAR -->
+    <!-- ============================================================ -->
+    <header class="topbar">
+        <div class="brand">
+            <span class="brand-dot"></span>
+            Bona<span>Markets</span>
+        </div>
+        <div class="topbar-right">
+            <span class="topbar-badge">Vendor Portal</span>
+            <button class="notif-btn" onclick="showToast('You have 3 new orders!','warning')">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                </svg>
+                <span class="dot"></span>
+            </button>
+            <div class="topbar-avatar" title="Karabelo">AO</div>
+        </div>
+    </header>
+
+    <div class="shell">
+
+        <!-- ============================================================ -->
+        <!-- SIDEBAR -->
+        <!-- ============================================================ -->
+        <nav class="sidebar" id="sidebar">
+
+            <!-- Section: Overview -->
+            <span class="sidebar-section-label">Overview</span>
+            <a class="nav-item active" onclick="navigate('dashboard',this)">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                </svg>
+                <span>Dashboard</span>
+            </a>
+
+            <!-- Section: Store -->
+            <span class="sidebar-section-label">Store</span>
+            <a class="nav-item" onclick="navigate('products',this)">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                    <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                </svg>
+                <span>Products</span>
+                <span class="nav-count">24</span>
+            </a>
+            <a class="nav-item" onclick="navigate('add-product',this)">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                </svg>
+                <span>Add Product</span>
+            </a>
+            <a class="nav-item" onclick="navigate('orders',this)">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                </svg>
+                <span>Orders</span>
+                <span class="nav-count">7</span>
+            </a>
+
+            <div class="sidebar-divider"></div>
+
+            <!-- Section: Finance -->
+            <span class="sidebar-section-label">Finance</span>
+            <a class="nav-item" onclick="navigate('payouts',this)">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <rect x="2" y="5" width="20" height="14" rx="2"/>
+                    <line x1="2" y1="10" x2="22" y2="10"/>
+                </svg>
+                <span>Payouts</span>
+            </a>
+
+            <div class="sidebar-divider"></div>
+
+            <!-- Section: Account -->
+            <span class="sidebar-section-label">Account</span>
+            <a class="nav-item" onclick="navigate('reviews',this)">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+                <span>Reviews</span>
+                <span class="nav-count">12</span>
+            </a>
+            <a class="nav-item" onclick="navigate('settings',this)">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <!-- ============================================================ -->
+        <!-- MAIN CONTENT -->
+        <!-- ============================================================ -->
+        <main class="main">
+
+            <!-- ============================================================ -->
+            <!-- PAGE: DASHBOARD -->
+            <!-- ============================================================ -->
+            <div class="page active" id="page-dashboard">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Good morning, Karabelo 👋</h1>
+                        <p class="page-sub">Here's what's happening with your store today.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="navigate('add-product', document.querySelector('[onclick*=add-product]'))">
+                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Add Product
+                    </button>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card gold">
+                        <div class="stat-label">Total Revenue</div>
+                        <div class="stat-value">R 48,290</div>
+                        <div class="stat-delta delta-up">
+                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <polyline points="18 15 12 9 6 15"/>
+                            </svg>
+                            +12.4% this month
+                        </div>
+                    </div>
+                    <div class="stat-card rust">
+                        <div class="stat-label">Active Orders</div>
+                        <div class="stat-value">7</div>
+                        <div class="stat-delta delta-up">
+                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <polyline points="18 15 12 9 6 15"/>
+                            </svg>
+                            3 awaiting shipment
+                        </div>
+                    </div>
+                    <div class="stat-card sage">
+                        <div class="stat-label">Products Listed</div>
+                        <div class="stat-value">24</div>
+                        <div class="stat-delta delta-up">
+                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <polyline points="18 15 12 9 6 15"/>
+                            </svg>
+                            2 low in stock
+                        </div>
+                    </div>
+                    <div class="stat-card ink">
+                        <div class="stat-label">Store Rating</div>
+                        <div class="stat-value">4.8 ★</div>
+                        <div class="stat-delta delta-up">
+                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <polyline points="18 15 12 9 6 15"/>
+                            </svg>
+                            12 new reviews
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts + Recent Orders -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;flex-wrap:wrap;">
+                    <!-- Sales Chart -->
+                    <div class="card" style="min-width:0">
+                        <div class="card-header">
+                            <span class="card-title">Sales — Last 7 Days</span>
+                            <span style="font-size:.78rem;color:var(--muted)">June 2025</span>
+                        </div>
+                        <div class="mini-chart" id="sales-chart"></div>
+                        <div style="display:flex;justify-content:space-between;margin-top:.5rem;font-size:.72rem;color:var(--muted)">
+                            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                        </div>
+                    </div>
+
+                    <!-- Recent Orders -->
+                    <div class="card" style="min-width:0">
+                        <div class="card-header">
+                            <span class="card-title">Recent Orders</span>
+                            <button class="btn btn-outline btn-sm" onclick="navigate('orders', document.querySelector('[onclick*=orders]'))">View all</button>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Order</th>
+                                        <th>Customer</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="order-id">#BM-0041</span></td>
+                                        <td><span>Sipho M.</span></td>
+                                        <td><span class="amount-cell">R 320</span></td>
+                                        <td><span class="badge badge-warning"><span class="badge-dot"></span>Pending</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="order-id">#BM-0040</span></td>
+                                        <td><span>Zanele K.</span></td>
+                                        <td><span class="amount-cell">R 860</span></td>
+                                        <td><span class="badge badge-success"><span class="badge-dot"></span>Shipped</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="order-id">#BM-0039</span></td>
+                                        <td><span>Kwame D.</span></td>
+                                        <td><span class="amount-cell">R 1,240</span></td>
+                                        <td><span class="badge badge-success"><span class="badge-dot"></span>Delivered</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- PAGE: PRODUCTS -->
+            <!-- ============================================================ -->
+            <div class="page" id="page-products">
+
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">My Products</h1>
+                        <p class="page-sub">Manage your listed items and inventory.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="navigate('add-product', document.querySelector('[onclick*=add-product]'))">
+                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        New Product
+                    </button>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="toolbar">
+                    <div class="search-wrap">
+                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input class="search-input" type="text" placeholder="Search products…" oninput="filterProducts(this.value)"/>
+                    </div>
+                    <select class="select-filter" onchange="filterProducts()">
+                        <option>All Categories</option>
+                        <option>Textiles & Fashion</option>
+                        <option>Handcrafts</option>
+                        <option>Food & Spices</option>
+                        <option>Jewellery</option>
+                    </select>
+                    <select class="select-filter">
+                        <option>All Status</option>
+                        <option>Active</option>
+                        <option>Out of Stock</option>
+                        <option>Draft</option>
+                    </select>
+                </div>
+
+                <!-- Product Grid -->
+                <div class="product-grid" id="product-grid"></div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- PAGE: ADD PRODUCT -->
+            <!-- ============================================================ -->
+            <div class="page" id="page-add-product">
+
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Add New Product</h1>
+                        <p class="page-sub">List a new item in your store.</p>
+                    </div>
+                    <button class="btn btn-outline" onclick="navigate('products', document.querySelector('[onclick*=products]'))">← Back to Products</button>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 340px;gap:1.4rem;align-items:start;flex-wrap:wrap;">
+                    <!-- Left Column: Product Details + Pricing -->
+                    <div>
+                        <!-- Product Details -->
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Product Details</span></div>
+                            <div class="form-grid">
+                                <div class="form-group full">
+                                    <label>Product Name</label>
+                                    <input type="text" placeholder="e.g. Kente Cloth Tote Bag" id="prod-name"/>
+                                </div>
+                                <div class="form-group full">
+                                    <label>Description</label>
+                                    <textarea placeholder="Describe your product — materials, origin, use…" id="prod-desc"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <select class="form-select" id="prod-cat">
+                                        <option value="">Select category</option>
+                                        <option>Textiles & Fashion</option>
+                                        <option>Handcrafts</option>
+                                        <option>Food & Spices</option>
+                                        <option>Jewellery</option>
+                                        <option>Art & Decor</option>
+                                        <option>Beauty & Wellness</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tags</label>
+                                    <input type="text" placeholder="handmade, african, cotton…" id="prod-tags"/>
+                                    <span class="form-hint">Separate with commas</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pricing & Inventory -->
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Pricing & Inventory</span></div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Price (ZAR)</label>
+                                    <input type="number" placeholder="0.00" id="prod-price"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Compare-at Price</label>
+                                    <input type="number" placeholder="0.00" id="prod-compare"/>
+                                    <span class="form-hint">Optional — shows a strikethrough price</span>
+                                </div>
+                                <div class="form-group">
+                                    <label>Stock Quantity</label>
+                                    <input type="number" placeholder="0" id="prod-stock"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>SKU</label>
+                                    <input type="text" placeholder="BM-SKU-001" id="prod-sku"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Weight (kg)</label>
+                                    <input type="number" placeholder="0.0" id="prod-weight"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Country of Origin</label>
+                                    <input type="text" placeholder="e.g. Ghana" id="prod-origin"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Images + Status -->
+                    <div>
+                        <!-- Product Images -->
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Product Images</span></div>
+                            <div class="upload-zone" onclick="showToast('File picker would open here','warning')">
+                                <div class="upload-icon">🖼️</div>
+                                <strong>Drop images here</strong>
+                                <p style="margin-top:.3rem;font-size:.8rem">PNG, JPG up to 10 MB each</p>
+                            </div>
+                        </div>
+
+                        <!-- Status & Visibility -->
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Status & Visibility</span></div>
+                            <div class="form-group" style="margin-bottom:1rem">
+                                <label>Listing Status</label>
+                                <select class="form-select" id="prod-status">
+                                    <option>Active — visible to buyers</option>
+                                    <option>Draft — save for later</option>
+                                    <option>Archived</option>
+                                </select>
+                            </div>
+                            <div class="toggle-wrap">
+                                <div>
+                                    <div class="toggle-label">Feature in store</div>
+                                    <div class="toggle-sub">Pin to your storefront homepage</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+                            </div>
+                            <div class="toggle-wrap">
+                                <div>
+                                    <div class="toggle-label">Allow reviews</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+                            <button class="btn btn-primary" style="flex:1" onclick="saveProduct()">Save Product</button>
+                            <button class="btn btn-outline" onclick="showToast('Draft saved','warning')">Save Draft</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- PAGE: ORDERS -->
+            <!-- ============================================================ -->
+            <div class="page" id="page-orders">
+
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Orders</h1>
+                        <p class="page-sub">Track and manage incoming customer orders.</p>
+                    </div>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="toolbar">
+                    <div class="search-wrap">
+                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input class="search-input" type="text" placeholder="Search by order or customer…"/>
+                    </div>
+                    <select class="select-filter">
+                        <option>All Orders</option>
+                        <option>Pending</option>
+                        <option>Shipped</option>
+                        <option>Delivered</option>
+                        <option>Cancelled</option>
+                    </select>
+                </div>
+
+                <!-- Orders Table -->
+                <div class="card" style="padding:0">
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Products</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- PAGE: PAYOUTS -->
+            <!-- ============================================================ -->
+            <div class="page" id="page-payouts">
+
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Payouts</h1>
+                        <p class="page-sub">Track earnings and request withdrawals.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openWithdrawModal()">Request Payout</button>
+                </div>
+
+                <!-- Payout Banner -->
+                <div class="payout-banner">
+                    <div>
+                        <div class="payout-label">Available Balance</div>
+                        <div class="payout-amount"><span>R</span> 12,450.00</div>
+                        <div class="payout-meta">Next automatic payout · 30 June 2025</div>
+                    </div>
+                    <div style="text-align:right">
+                        <div class="payout-label">Total Earned (All Time)</div>
+                        <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;color:white">R 48,290.00</div>
+                        <div class="payout-meta">Commission (8%) · R 3,863.20 paid</div>
+                    </div>
+                </div>
+
+                <!-- Payout Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card gold">
+                        <div class="stat-label">This Month</div>
+                        <div class="stat-value">R 8,740</div>
+                        <div class="stat-delta delta-up">↑ 12.4% vs last month</div>
+                    </div>
+                    <div class="stat-card sage">
+                        <div class="stat-label">Pending Clearance</div>
+                        <div class="stat-value">R 2,100</div>
+                        <div class="stat-delta">Clears in 3–5 days</div>
+                    </div>
+                    <div class="stat-card ink">
+                        <div class="stat-label">Last Payout</div>
+                        <div class="stat-value">R 6,200</div>
+                        <div class="stat-delta">31 May 2025</div>
+                    </div>
+                </div>
+
+                <!-- Payout History -->
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Payout History</span></div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Reference</th>
+                                    <th>Method</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>31 May 2025</td>
+                                    <td style="font-family:'Syne',sans-serif;font-weight:700">#PAY-0019</td>
+                                    <td>FNB Bank Account</td>
+                                    <td class="amount-cell">R 6,200.00</td>
+                                    <td><span class="badge badge-success"><span class="badge-dot"></span>Paid</span></td>
+                                </tr>
+                                <tr>
+                                    <td>30 Apr 2025</td>
+                                    <td style="font-family:'Syne',sans-serif;font-weight:700">#PAY-0018</td>
+                                    <td>FNB Bank Account</td>
+                                    <td class="amount-cell">R 5,800.00</td>
+                                    <td><span class="badge badge-success"><span class="badge-dot"></span>Paid</span></td>
+                                </tr>
+                                <tr>
+                                    <td>31 Mar 2025</td>
+                                    <td style="font-family:'Syne',sans-serif;font-weight:700">#PAY-0017</td>
+                                    <td>FNB Bank Account</td>
+                                    <td class="amount-cell">R 4,250.00</td>
+                                    <td><span class="badge badge-success"><span class="badge-dot"></span>Paid</span></td>
+                                </tr>
+                                <tr>
+                                    <td>28 Feb 2025</td>
+                                    <td style="font-family:'Syne',sans-serif;font-weight:700">#PAY-0016</td>
+                                    <td>FNB Bank Account</td>
+                                    <td class="amount-cell">R 3,100.00</td>
+                                    <td><span class="badge badge-success"><span class="badge-dot"></span>Paid</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- PAGE: REVIEWS -->
+            <!-- ============================================================ -->
+            <div class="page" id="page-reviews">
+
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Customer Reviews</h1>
+                        <p class="page-sub">See what buyers are saying about your products.</p>
+                    </div>
+                </div>
+
+                <!-- Review Stats -->
+                <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
+                    <div class="stat-card gold">
+                        <div class="stat-label">Overall Rating</div>
+                        <div class="stat-value">4.8</div>
+                        <div class="stat-delta">★★★★★ (12 reviews)</div>
+                    </div>
+                    <div class="stat-card sage">
+                        <div class="stat-label">5 Stars</div>
+                        <div class="stat-value">9</div>
+                        <div class="stat-delta delta-up">75% of reviews</div>
+                    </div>
+                    <div class="stat-card ink">
+                        <div class="stat-label">4 Stars</div>
+                        <div class="stat-value">2</div>
+                    </div>
+                    <div class="stat-card rust">
+                        <div class="stat-label">3 Stars or Below</div>
+                        <div class="stat-value">1</div>
+                    </div>
+                </div>
+
+                <!-- Review List -->
+                <div class="card">
+                    <div class="card-header"><span class="card-title">All Reviews</span></div>
+
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="reviewer">Zanele K.</span>
+                            <span class="stars">★★★★★</span>
+                        </div>
+                        <p class="review-text">The quality of the kente tote is absolutely stunning. Ships fast and the packaging was beautiful — I'll be ordering again!</p>
+                        <div class="review-date">12 June 2025 · Kente Cloth Tote Bag</div>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="reviewer">Sipho M.</span>
+                            <span class="stars">★★★★★</span>
+                        </div>
+                        <p class="review-text">Authentic, well-made, arrived in perfect condition. Bona Markets is my go-to for African crafts now.</p>
+                        <div class="review-date">9 June 2025 · Beaded Ndebele Necklace</div>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="reviewer">Kwame D.</span>
+                            <span class="stars">★★★★☆</span>
+                        </div>
+                        <p class="review-text">Great product, slight delay on shipping but vendor communicated proactively. Very happy with the item itself.</p>
+                        <div class="review-date">5 June 2025 · Moroccan Leather Pouch</div>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="reviewer">Amina B.</span>
+                            <span class="stars">★★★☆☆</span>
+                        </div>
+                        <p class="review-text">Item was as described but the colour was slightly different from the photos. Would suggest better photography.</p>
+                        <div class="review-date">28 May 2025 · Ankara Print Cushion Cover</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- PAGE: SETTINGS -->
+            <!-- ============================================================ -->
+            <div class="page" id="page-settings">
+
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Store Settings</h1>
+                        <p class="page-sub">Manage your vendor profile and preferences.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showToast('Settings saved!','success')">Save Changes</button>
+                </div>
+
+                <!-- Store Hero -->
+                <div class="store-hero">
+                    <div class="store-logo">🛍️</div>
+                    <div class="store-info">
+                        <h2>Amara's Artisan Market</h2>
+                        <p>Member since January 2024 · Johannesburg, South Africa</p>
+                    </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;align-items:start">
+                    <!-- Left Column: Store Profile -->
+                    <div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Store Profile</span></div>
+                            <div class="form-grid">
+                                <div class="form-group full">
+                                    <label>Store Name</label>
+                                    <input type="text" value="Amara's Artisan Market"/>
+                                </div>
+                                <div class="form-group full">
+                                    <label>Store Bio</label>
+                                    <textarea>Handcrafted African goods made with love and tradition. Every piece tells a story.</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone</label>
+                                    <input type="tel" value="+27 82 456 7890"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>City</label>
+                                    <input type="text" value="Johannesburg"/>
+                                </div>
+                                <div class="form-group full">
+                                    <label>Store URL</label>
+                                    <input type="url" value="bonamarkets.co.za/amara"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Banking + Notifications -->
+                    <div>
+                        <!-- Banking Details -->
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Banking Details</span></div>
+                            <div class="form-grid">
+                                <div class="form-group full">
+                                    <label>Account Holder Name</label>
+                                    <input type="text" value="Amara Osei"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Bank Name</label>
+                                    <input type="text" value="FNB"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Account Number</label>
+                                    <input type="text" value="••••••7823"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Branch Code</label>
+                                    <input type="text" value="250655"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Account Type</label>
+                                    <select class="form-select">
+                                        <option>Cheque / Current</option>
+                                        <option>Savings</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notifications -->
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Notifications</span></div>
+                            <div class="toggle-wrap">
+                                <div>
+                                    <div class="toggle-label">New order alerts</div>
+                                    <div class="toggle-sub">Email & SMS when an order comes in</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+                            </div>
+                            <div class="toggle-wrap">
+                                <div>
+                                    <div class="toggle-label">Payout confirmations</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+                            </div>
+                            <div class="toggle-wrap">
+                                <div>
+                                    <div class="toggle-label">Review notifications</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox"/><span class="toggle-slider"></span></label>
+                            </div>
+                            <div class="toggle-wrap">
+                                <div>
+                                    <div class="toggle-label">Marketing updates</div>
+                                    <div class="toggle-sub">Tips and promotions from Bona Markets</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODALS -->
+    <!-- ============================================================ -->
+
+    <!-- Withdraw Modal -->
+    <div class="modal-overlay" id="withdraw-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Request Payout</h3>
+                <button class="modal-close" onclick="closeWithdrawModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" style="margin-bottom:1rem">
+                    <label>Withdrawal Amount (ZAR)</label>
+                    <input type="number" placeholder="Enter amount" id="withdraw-amount"/>
+                    <span class="form-hint">Available balance: R 12,450.00</span>
+                </div>
+                <div class="form-group">
+                    <label>Destination Account</label>
+                    <select class="form-select">
+                        <option>FNB Cheque ••••7823</option>
+                    </select>
+                </div>
+                <div style="background:var(--cream);border-radius:var(--radius);padding:.9rem 1rem;margin-top:1rem;font-size:.83rem;color:var(--muted);line-height:1.6">
+                    Payouts are processed within 1–3 business days. An 8% platform commission is already deducted from your available balance.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeWithdrawModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitWithdraw()">Confirm Request</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div class="modal-overlay" id="order-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="order-modal-title">Order Details</h3>
+                <button class="modal-close" onclick="closeOrderModal()">✕</button>
+            </div>
+            <div class="modal-body" id="order-modal-body"></div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeOrderModal()">Close</button>
+                <button class="btn btn-primary" onclick="markShipped()">Mark as Shipped</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TOAST CONTAINER -->
+    <!-- ============================================================ -->
+    <div class="toast-wrap" id="toast-wrap"></div>
+
+    <!-- ============================================================ -->
+    <!-- EXTERNAL JAVASCRIPT -->
+    <!-- ============================================================ -->
+    <script src="../assets/js/vendor-dashboard.js"></script>
+
+</body>
+</html>
