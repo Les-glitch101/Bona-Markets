@@ -1,36 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bona Markets — Vendor Portal</title>
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
 
     <!-- External CSS -->
     <link rel="stylesheet" href="../assets/css/vendor-dashboard.css" />
 </head>
+
 <body>
 
     <!-- ============================================================ -->
     <!-- TOPBAR -->
     <!-- ============================================================ -->
     <header class="topbar">
-        <div class="brand">
-            <span class="brand-dot"></span>
-            Bona<span>Markets</span>
-        </div>
-        <div class="topbar-right">
-            <span class="topbar-badge">Vendor Portal</span>
-            <button class="notif-btn" onclick="showToast('You have 3 new orders!','warning')">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                </svg>
-                <span class="dot"></span>
-            </button>
-            <div class="topbar-avatar" title="Karabelo">AO</div>
+        <div class="container">
+            <div class="topbar-inner">
+                <!-- LEFT: Hamburger + Brand -->
+                <div style="display:flex;align-items:center;gap:0.75rem;">
+                    <!-- HAMBURGER TOGGLE (visible on mobile) -->
+                    <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()"
+                        aria-label="Toggle navigation">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <line x1="3" y1="12" x2="21" y2="12" />
+                            <line x1="3" y1="18" x2="21" y2="18" />
+                        </svg>
+                    </button>
+
+                    <div class="brand">
+                        <span class="brand-dot"></span>
+                        Bona<span>Markets</span>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Badge + Notif + Avatar -->
+                <div class="topbar-right">
+                    <span class="topbar-badge">Vendor Portal</span>
+                    <button class="notif-btn" onclick="showToast('You have 3 new orders!','warning')">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                        </svg>
+                        <span class="dot"></span>
+                    </button>
+                    <div class="topbar-avatar" title="Karabelo">AO</div>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -40,15 +65,17 @@
         <!-- SIDEBAR -->
         <!-- ============================================================ -->
         <nav class="sidebar" id="sidebar">
+            <!-- Close button (visible on mobile) -->
+            <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
 
             <!-- Section: Overview -->
             <span class="sidebar-section-label">Overview</span>
             <a class="nav-item active" onclick="navigate('dashboard',this)">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <rect x="3" y="3" width="7" height="7"/>
-                    <rect x="14" y="3" width="7" height="7"/>
-                    <rect x="14" y="14" width="7" height="7"/>
-                    <rect x="3" y="14" width="7" height="7"/>
+                    <rect x="3" y="3" width="7" height="7" />
+                    <rect x="14" y="3" width="7" height="7" />
+                    <rect x="14" y="14" width="7" height="7" />
+                    <rect x="3" y="14" width="7" height="7" />
                 </svg>
                 <span>Dashboard</span>
             </a>
@@ -57,24 +84,24 @@
             <span class="sidebar-section-label">Store</span>
             <a class="nav-item" onclick="navigate('products',this)">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-                    <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                    <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" />
+                    <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
                 </svg>
                 <span>Products</span>
                 <span class="nav-count">24</span>
             </a>
             <a class="nav-item" onclick="navigate('add-product',this)">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="12" y1="8" x2="12" y2="16"/>
-                    <line x1="8" y1="12" x2="16" y2="12"/>
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="16" />
+                    <line x1="8" y1="12" x2="16" y2="12" />
                 </svg>
                 <span>Add Product</span>
             </a>
             <a class="nav-item" onclick="navigate('orders',this)">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14 2 14 8 20 8"/>
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
                 </svg>
                 <span>Orders</span>
                 <span class="nav-count">7</span>
@@ -86,8 +113,8 @@
             <span class="sidebar-section-label">Finance</span>
             <a class="nav-item" onclick="navigate('payouts',this)">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <rect x="2" y="5" width="20" height="14" rx="2"/>
-                    <line x1="2" y1="10" x2="22" y2="10"/>
+                    <rect x="2" y="5" width="20" height="14" rx="2" />
+                    <line x1="2" y1="10" x2="22" y2="10" />
                 </svg>
                 <span>Payouts</span>
             </a>
@@ -98,15 +125,17 @@
             <span class="sidebar-section-label">Account</span>
             <a class="nav-item" onclick="navigate('reviews',this)">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                 </svg>
                 <span>Reviews</span>
                 <span class="nav-count">12</span>
             </a>
             <a class="nav-item" onclick="navigate('settings',this)">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="3"/>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    <circle cx="12" cy="12" r="3" />
+                    <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
                 </svg>
                 <span>Settings</span>
             </a>
@@ -128,10 +157,12 @@
                         <h1 class="page-title">Good morning, Karabelo 👋</h1>
                         <p class="page-sub">Here's what's happening with your store today.</p>
                     </div>
-                    <button class="btn btn-primary" onclick="navigate('add-product', document.querySelector('[onclick*=add-product]'))">
-                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                            <line x1="12" y1="5" x2="12" y2="19"/>
-                            <line x1="5" y1="12" x2="19" y2="12"/>
+                    <button class="btn btn-primary"
+                        onclick="navigate('add-product', document.querySelector('[onclick*=\" add-product\"]'))">
+                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"
+                            viewBox="0 0 24 24">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
                         </svg>
                         Add Product
                     </button>
@@ -143,8 +174,9 @@
                         <div class="stat-label">Total Revenue</div>
                         <div class="stat-value">R 48,290</div>
                         <div class="stat-delta delta-up">
-                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                <polyline points="18 15 12 9 6 15"/>
+                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"
+                                viewBox="0 0 24 24">
+                                <polyline points="18 15 12 9 6 15" />
                             </svg>
                             +12.4% this month
                         </div>
@@ -153,8 +185,9 @@
                         <div class="stat-label">Active Orders</div>
                         <div class="stat-value">7</div>
                         <div class="stat-delta delta-up">
-                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                <polyline points="18 15 12 9 6 15"/>
+                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"
+                                viewBox="0 0 24 24">
+                                <polyline points="18 15 12 9 6 15" />
                             </svg>
                             3 awaiting shipment
                         </div>
@@ -163,8 +196,9 @@
                         <div class="stat-label">Products Listed</div>
                         <div class="stat-value">24</div>
                         <div class="stat-delta delta-up">
-                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                <polyline points="18 15 12 9 6 15"/>
+                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"
+                                viewBox="0 0 24 24">
+                                <polyline points="18 15 12 9 6 15" />
                             </svg>
                             2 low in stock
                         </div>
@@ -173,8 +207,9 @@
                         <div class="stat-label">Store Rating</div>
                         <div class="stat-value">4.8 ★</div>
                         <div class="stat-delta delta-up">
-                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                <polyline points="18 15 12 9 6 15"/>
+                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"
+                                viewBox="0 0 24 24">
+                                <polyline points="18 15 12 9 6 15" />
                             </svg>
                             12 new reviews
                         </div>
@@ -182,24 +217,26 @@
                 </div>
 
                 <!-- Charts + Recent Orders -->
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;flex-wrap:wrap;">
+                <div class="dashboard-grid">
                     <!-- Sales Chart -->
-                    <div class="card" style="min-width:0">
+                    <div class="card">
                         <div class="card-header">
                             <span class="card-title">Sales — Last 7 Days</span>
                             <span style="font-size:.78rem;color:var(--muted)">June 2025</span>
                         </div>
                         <div class="mini-chart" id="sales-chart"></div>
-                        <div style="display:flex;justify-content:space-between;margin-top:.5rem;font-size:.72rem;color:var(--muted)">
+                        <div class="chart-labels">
                             <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
                         </div>
                     </div>
 
                     <!-- Recent Orders -->
-                    <div class="card" style="min-width:0">
+                    <div class="card">
                         <div class="card-header">
                             <span class="card-title">Recent Orders</span>
-                            <button class="btn btn-outline btn-sm" onclick="navigate('orders', document.querySelector('[onclick*=orders]'))">View all</button>
+                            <button class="btn btn-outline btn-sm"
+                                onclick="navigate('orders', document.querySelector('[onclick*=\" orders\"]'))">View
+                                all</button>
                         </div>
                         <div class="table-wrap">
                             <table>
@@ -216,19 +253,22 @@
                                         <td><span class="order-id">#BM-0041</span></td>
                                         <td><span>Sipho M.</span></td>
                                         <td><span class="amount-cell">R 320</span></td>
-                                        <td><span class="badge badge-warning"><span class="badge-dot"></span>Pending</span></td>
+                                        <td><span class="badge badge-warning"><span
+                                                    class="badge-dot"></span>Pending</span></td>
                                     </tr>
                                     <tr>
                                         <td><span class="order-id">#BM-0040</span></td>
                                         <td><span>Zanele K.</span></td>
                                         <td><span class="amount-cell">R 860</span></td>
-                                        <td><span class="badge badge-success"><span class="badge-dot"></span>Shipped</span></td>
+                                        <td><span class="badge badge-success"><span
+                                                    class="badge-dot"></span>Shipped</span></td>
                                     </tr>
                                     <tr>
                                         <td><span class="order-id">#BM-0039</span></td>
                                         <td><span>Kwame D.</span></td>
                                         <td><span class="amount-cell">R 1,240</span></td>
-                                        <td><span class="badge badge-success"><span class="badge-dot"></span>Delivered</span></td>
+                                        <td><span class="badge badge-success"><span
+                                                    class="badge-dot"></span>Delivered</span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -247,10 +287,12 @@
                         <h1 class="page-title">My Products</h1>
                         <p class="page-sub">Manage your listed items and inventory.</p>
                     </div>
-                    <button class="btn btn-primary" onclick="navigate('add-product', document.querySelector('[onclick*=add-product]'))">
-                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                            <line x1="12" y1="5" x2="12" y2="19"/>
-                            <line x1="5" y1="12" x2="19" y2="12"/>
+                    <button class="btn btn-primary"
+                        onclick="navigate('add-product', document.querySelector('[onclick*=\" add-product\"]'))">
+                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"
+                            viewBox="0 0 24 24">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
                         </svg>
                         New Product
                     </button>
@@ -259,11 +301,13 @@
                 <!-- Toolbar -->
                 <div class="toolbar">
                     <div class="search-wrap">
-                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <circle cx="11" cy="11" r="8"/>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
                         </svg>
-                        <input class="search-input" type="text" placeholder="Search products…" oninput="filterProducts(this.value)"/>
+                        <input class="search-input" type="text" placeholder="Search products…"
+                            oninput="filterProducts(this.value)" />
                     </div>
                     <select class="select-filter" onchange="filterProducts()">
                         <option>All Categories</option>
@@ -294,11 +338,12 @@
                         <h1 class="page-title">Add New Product</h1>
                         <p class="page-sub">List a new item in your store.</p>
                     </div>
-                    <button class="btn btn-outline" onclick="navigate('products', document.querySelector('[onclick*=products]'))">← Back to Products</button>
+                    <button class="btn btn-outline" onclick="navigate('products', document.querySelector('[onclick*=\"
+                        products\"]'))">← Back to Products</button>
                 </div>
 
-                <div style="display:grid;grid-template-columns:1fr 340px;gap:1.4rem;align-items:start;flex-wrap:wrap;">
-                    <!-- Left Column: Product Details + Pricing -->
+                <div class="add-product-grid">
+                    <!-- Left Column -->
                     <div>
                         <!-- Product Details -->
                         <div class="card">
@@ -306,11 +351,12 @@
                             <div class="form-grid">
                                 <div class="form-group full">
                                     <label>Product Name</label>
-                                    <input type="text" placeholder="e.g. Kente Cloth Tote Bag" id="prod-name"/>
+                                    <input type="text" placeholder="e.g. Kente Cloth Tote Bag" id="prod-name" />
                                 </div>
                                 <div class="form-group full">
                                     <label>Description</label>
-                                    <textarea placeholder="Describe your product — materials, origin, use…" id="prod-desc"></textarea>
+                                    <textarea placeholder="Describe your product — materials, origin, use…"
+                                        id="prod-desc"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label>Category</label>
@@ -326,7 +372,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Tags</label>
-                                    <input type="text" placeholder="handmade, african, cotton…" id="prod-tags"/>
+                                    <input type="text" placeholder="handmade, african, cotton…" id="prod-tags" />
                                     <span class="form-hint">Separate with commas</span>
                                 </div>
                             </div>
@@ -338,34 +384,34 @@
                             <div class="form-grid">
                                 <div class="form-group">
                                     <label>Price (ZAR)</label>
-                                    <input type="number" placeholder="0.00" id="prod-price"/>
+                                    <input type="number" placeholder="0.00" id="prod-price" />
                                 </div>
                                 <div class="form-group">
                                     <label>Compare-at Price</label>
-                                    <input type="number" placeholder="0.00" id="prod-compare"/>
+                                    <input type="number" placeholder="0.00" id="prod-compare" />
                                     <span class="form-hint">Optional — shows a strikethrough price</span>
                                 </div>
                                 <div class="form-group">
                                     <label>Stock Quantity</label>
-                                    <input type="number" placeholder="0" id="prod-stock"/>
+                                    <input type="number" placeholder="0" id="prod-stock" />
                                 </div>
                                 <div class="form-group">
                                     <label>SKU</label>
-                                    <input type="text" placeholder="BM-SKU-001" id="prod-sku"/>
+                                    <input type="text" placeholder="BM-SKU-001" id="prod-sku" />
                                 </div>
                                 <div class="form-group">
                                     <label>Weight (kg)</label>
-                                    <input type="number" placeholder="0.0" id="prod-weight"/>
+                                    <input type="number" placeholder="0.0" id="prod-weight" />
                                 </div>
                                 <div class="form-group">
                                     <label>Country of Origin</label>
-                                    <input type="text" placeholder="e.g. Ghana" id="prod-origin"/>
+                                    <input type="text" placeholder="e.g. Ghana" id="prod-origin" />
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right Column: Images + Status -->
+                    <!-- Right Column -->
                     <div>
                         <!-- Product Images -->
                         <div class="card">
@@ -393,20 +439,23 @@
                                     <div class="toggle-label">Feature in store</div>
                                     <div class="toggle-sub">Pin to your storefront homepage</div>
                                 </div>
-                                <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+                                <label class="toggle"><input type="checkbox" checked /><span
+                                        class="toggle-slider"></span></label>
                             </div>
                             <div class="toggle-wrap">
                                 <div>
                                     <div class="toggle-label">Allow reviews</div>
                                 </div>
-                                <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+                                <label class="toggle"><input type="checkbox" checked /><span
+                                        class="toggle-slider"></span></label>
                             </div>
                         </div>
 
                         <!-- Action Buttons -->
-                        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
-                            <button class="btn btn-primary" style="flex:1" onclick="saveProduct()">Save Product</button>
-                            <button class="btn btn-outline" onclick="showToast('Draft saved','warning')">Save Draft</button>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="saveProduct()">Save Product</button>
+                            <button class="btn btn-outline" onclick="showToast('Draft saved','warning')">Save
+                                Draft</button>
                         </div>
                     </div>
                 </div>
@@ -427,11 +476,12 @@
                 <!-- Toolbar -->
                 <div class="toolbar">
                     <div class="search-wrap">
-                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <circle cx="11" cy="11" r="8"/>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
                         </svg>
-                        <input class="search-input" type="text" placeholder="Search by order or customer…"/>
+                        <input class="search-input" type="text" placeholder="Search by order or customer…" />
                     </div>
                     <select class="select-filter">
                         <option>All Orders</option>
@@ -443,7 +493,7 @@
                 </div>
 
                 <!-- Orders Table -->
-                <div class="card" style="padding:0">
+                <div class="card card-table">
                     <div class="table-wrap">
                         <table>
                             <thead>
@@ -485,7 +535,8 @@
                     </div>
                     <div style="text-align:right">
                         <div class="payout-label">Total Earned (All Time)</div>
-                        <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;color:white">R 48,290.00</div>
+                        <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;color:white">R
+                            48,290.00</div>
                         <div class="payout-meta">Commission (8%) · R 3,863.20 paid</div>
                     </div>
                 </div>
@@ -529,28 +580,32 @@
                                     <td style="font-family:'Syne',sans-serif;font-weight:700">#PAY-0019</td>
                                     <td>FNB Bank Account</td>
                                     <td class="amount-cell">R 6,200.00</td>
-                                    <td><span class="badge badge-success"><span class="badge-dot"></span>Paid</span></td>
+                                    <td><span class="badge badge-success"><span class="badge-dot"></span>Paid</span>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>30 Apr 2025</td>
                                     <td style="font-family:'Syne',sans-serif;font-weight:700">#PAY-0018</td>
                                     <td>FNB Bank Account</td>
                                     <td class="amount-cell">R 5,800.00</td>
-                                    <td><span class="badge badge-success"><span class="badge-dot"></span>Paid</span></td>
+                                    <td><span class="badge badge-success"><span class="badge-dot"></span>Paid</span>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>31 Mar 2025</td>
                                     <td style="font-family:'Syne',sans-serif;font-weight:700">#PAY-0017</td>
                                     <td>FNB Bank Account</td>
                                     <td class="amount-cell">R 4,250.00</td>
-                                    <td><span class="badge badge-success"><span class="badge-dot"></span>Paid</span></td>
+                                    <td><span class="badge badge-success"><span class="badge-dot"></span>Paid</span>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>28 Feb 2025</td>
                                     <td style="font-family:'Syne',sans-serif;font-weight:700">#PAY-0016</td>
                                     <td>FNB Bank Account</td>
                                     <td class="amount-cell">R 3,100.00</td>
-                                    <td><span class="badge badge-success"><span class="badge-dot"></span>Paid</span></td>
+                                    <td><span class="badge badge-success"><span class="badge-dot"></span>Paid</span>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -571,7 +626,7 @@
                 </div>
 
                 <!-- Review Stats -->
-                <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
+                <div class="stats-grid reviews-stats">
                     <div class="stat-card gold">
                         <div class="stat-label">Overall Rating</div>
                         <div class="stat-value">4.8</div>
@@ -601,7 +656,8 @@
                             <span class="reviewer">Zanele K.</span>
                             <span class="stars">★★★★★</span>
                         </div>
-                        <p class="review-text">The quality of the kente tote is absolutely stunning. Ships fast and the packaging was beautiful — I'll be ordering again!</p>
+                        <p class="review-text">The quality of the kente tote is absolutely stunning. Ships fast and the
+                            packaging was beautiful — I'll be ordering again!</p>
                         <div class="review-date">12 June 2025 · Kente Cloth Tote Bag</div>
                     </div>
 
@@ -610,7 +666,8 @@
                             <span class="reviewer">Sipho M.</span>
                             <span class="stars">★★★★★</span>
                         </div>
-                        <p class="review-text">Authentic, well-made, arrived in perfect condition. Bona Markets is my go-to for African crafts now.</p>
+                        <p class="review-text">Authentic, well-made, arrived in perfect condition. Bona Markets is my
+                            go-to for African crafts now.</p>
                         <div class="review-date">9 June 2025 · Beaded Ndebele Necklace</div>
                     </div>
 
@@ -619,7 +676,8 @@
                             <span class="reviewer">Kwame D.</span>
                             <span class="stars">★★★★☆</span>
                         </div>
-                        <p class="review-text">Great product, slight delay on shipping but vendor communicated proactively. Very happy with the item itself.</p>
+                        <p class="review-text">Great product, slight delay on shipping but vendor communicated
+                            proactively. Very happy with the item itself.</p>
                         <div class="review-date">5 June 2025 · Moroccan Leather Pouch</div>
                     </div>
 
@@ -628,7 +686,8 @@
                             <span class="reviewer">Amina B.</span>
                             <span class="stars">★★★☆☆</span>
                         </div>
-                        <p class="review-text">Item was as described but the colour was slightly different from the photos. Would suggest better photography.</p>
+                        <p class="review-text">Item was as described but the colour was slightly different from the
+                            photos. Would suggest better photography.</p>
                         <div class="review-date">28 May 2025 · Ankara Print Cushion Cover</div>
                     </div>
                 </div>
@@ -644,7 +703,8 @@
                         <h1 class="page-title">Store Settings</h1>
                         <p class="page-sub">Manage your vendor profile and preferences.</p>
                     </div>
-                    <button class="btn btn-primary" onclick="showToast('Settings saved!','success')">Save Changes</button>
+                    <button class="btn btn-primary" onclick="showToast('Settings saved!','success')">Save
+                        Changes</button>
                 </div>
 
                 <!-- Store Hero -->
@@ -656,7 +716,7 @@
                     </div>
                 </div>
 
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;align-items:start">
+                <div class="settings-grid">
                     <!-- Left Column: Store Profile -->
                     <div>
                         <div class="card">
@@ -664,7 +724,7 @@
                             <div class="form-grid">
                                 <div class="form-group full">
                                     <label>Store Name</label>
-                                    <input type="text" value="Amara's Artisan Market"/>
+                                    <input type="text" value="Amara's Artisan Market" />
                                 </div>
                                 <div class="form-group full">
                                     <label>Store Bio</label>
@@ -672,15 +732,15 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Phone</label>
-                                    <input type="tel" value="+27 82 456 7890"/>
+                                    <input type="tel" value="+27 82 456 7890" />
                                 </div>
                                 <div class="form-group">
                                     <label>City</label>
-                                    <input type="text" value="Johannesburg"/>
+                                    <input type="text" value="Johannesburg" />
                                 </div>
                                 <div class="form-group full">
                                     <label>Store URL</label>
-                                    <input type="url" value="bonamarkets.co.za/amara"/>
+                                    <input type="url" value="bonamarkets.co.za/amara" />
                                 </div>
                             </div>
                         </div>
@@ -694,19 +754,19 @@
                             <div class="form-grid">
                                 <div class="form-group full">
                                     <label>Account Holder Name</label>
-                                    <input type="text" value="Amara Osei"/>
+                                    <input type="text" value="Amara Osei" />
                                 </div>
                                 <div class="form-group">
                                     <label>Bank Name</label>
-                                    <input type="text" value="FNB"/>
+                                    <input type="text" value="FNB" />
                                 </div>
                                 <div class="form-group">
                                     <label>Account Number</label>
-                                    <input type="text" value="••••••7823"/>
+                                    <input type="text" value="••••••7823" />
                                 </div>
                                 <div class="form-group">
                                     <label>Branch Code</label>
-                                    <input type="text" value="250655"/>
+                                    <input type="text" value="250655" />
                                 </div>
                                 <div class="form-group">
                                     <label>Account Type</label>
@@ -726,26 +786,30 @@
                                     <div class="toggle-label">New order alerts</div>
                                     <div class="toggle-sub">Email & SMS when an order comes in</div>
                                 </div>
-                                <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+                                <label class="toggle"><input type="checkbox" checked /><span
+                                        class="toggle-slider"></span></label>
                             </div>
                             <div class="toggle-wrap">
                                 <div>
                                     <div class="toggle-label">Payout confirmations</div>
                                 </div>
-                                <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+                                <label class="toggle"><input type="checkbox" checked /><span
+                                        class="toggle-slider"></span></label>
                             </div>
                             <div class="toggle-wrap">
                                 <div>
                                     <div class="toggle-label">Review notifications</div>
                                 </div>
-                                <label class="toggle"><input type="checkbox"/><span class="toggle-slider"></span></label>
+                                <label class="toggle"><input type="checkbox" /><span
+                                        class="toggle-slider"></span></label>
                             </div>
                             <div class="toggle-wrap">
                                 <div>
                                     <div class="toggle-label">Marketing updates</div>
                                     <div class="toggle-sub">Tips and promotions from Bona Markets</div>
                                 </div>
-                                <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+                                <label class="toggle"><input type="checkbox" checked /><span
+                                        class="toggle-slider"></span></label>
                             </div>
                         </div>
                     </div>
@@ -754,6 +818,57 @@
 
         </main>
     </div>
+
+    <!-- ============================================================ -->
+    <!-- FOOTER -->
+    <!-- ============================================================ -->
+    <footer class="vendor-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Brand -->
+                <div>
+                    <h3 class="footer-brand">Bona <span>Markets</span></h3>
+                    <p class="footer-desc">Your trusted multi-vendor marketplace for authentic African goods.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="../index.php">Home</a></li>
+                        <li><a href="../products/index.php">Shop</a></li>
+                        <li><a href="dashboard.php">Vendor Dashboard</a></li>
+                        <li><a href="products/index.php">My Products</a></li>
+                    </ul>
+                </div>
+
+                <!-- Vendor Support -->
+                <div>
+                    <h4 class="footer-heading">Vendor Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="showToast('Help Center coming soon!','warning')">Help Center</a></li>
+                        <li><a href="#" onclick="showToast('Contact support: vendor@bonamarkets.com','success')">Contact
+                                Us</a></li>
+                        <li><a href="#" onclick="showToast('Payout guide coming soon!','warning')">Payout Guide</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div>
+                    <h4 class="footer-heading">Legal</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="showToast('Terms of Service','warning')">Terms of Service</a></li>
+                        <li><a href="#" onclick="showToast('Privacy Policy','warning')">Privacy Policy</a></li>
+                        <li><a href="#" onclick="showToast('Cookie Policy','warning')">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Bona Markets. All rights reserved.</p>
+                <p class="footer-version">Vendor Portal v1.0</p>
+            </div>
+        </div>
+    </footer>
 
     <!-- ============================================================ -->
     <!-- MODALS -->
@@ -769,7 +884,7 @@
             <div class="modal-body">
                 <div class="form-group" style="margin-bottom:1rem">
                     <label>Withdrawal Amount (ZAR)</label>
-                    <input type="number" placeholder="Enter amount" id="withdraw-amount"/>
+                    <input type="number" placeholder="Enter amount" id="withdraw-amount" />
                     <span class="form-hint">Available balance: R 12,450.00</span>
                 </div>
                 <div class="form-group">
@@ -778,8 +893,10 @@
                         <option>FNB Cheque ••••7823</option>
                     </select>
                 </div>
-                <div style="background:var(--cream);border-radius:var(--radius);padding:.9rem 1rem;margin-top:1rem;font-size:.83rem;color:var(--muted);line-height:1.6">
-                    Payouts are processed within 1–3 business days. An 8% platform commission is already deducted from your available balance.
+                <div
+                    style="background:var(--cream);border-radius:var(--radius);padding:.9rem 1rem;margin-top:1rem;font-size:.83rem;color:var(--muted);line-height:1.6">
+                    Payouts are processed within 1–3 business days. An 8% platform commission is already deducted from
+                    your available balance.
                 </div>
             </div>
             <div class="modal-footer">
@@ -815,4 +932,5 @@
     <script src="../assets/js/vendor-dashboard.js"></script>
 
 </body>
+
 </html>

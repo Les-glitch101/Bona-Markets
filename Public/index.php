@@ -49,6 +49,7 @@ $userRole = $isLoggedIn ? $_SESSION['role'] : '';
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
@@ -61,19 +62,23 @@ $userRole = $isLoggedIn ? $_SESSION['role'] : '';
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
+
         .product-card {
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
+
         .product-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
         }
+
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
             opacity: 0.5;
         }
     </style>
 </head>
+
 <body class="bg-gray-50">
 
     <!-- ========== NAVBAR ========== -->
@@ -90,7 +95,7 @@ $userRole = $isLoggedIn ? $_SESSION['role'] : '';
                     <a href="index.php" class="text-gray-600 hover:text-blue-600 font-medium">Shop</a>
                     <a href="#" class="text-gray-600 hover:text-blue-600 font-medium">Categories</a>
                     <a href="#" class="text-gray-600 hover:text-blue-600 font-medium">About</a>
-                    <a href="#" class="text-gray-600 hover:text-blue-600 font-medium">Contact</a>
+                    <a href="contact.php" class="text-gray-600 hover:text-blue-600 font-medium">Contact</a>
                 </div>
 
                 <!-- Desktop Auth Buttons (dynamic based on login status) -->
@@ -127,7 +132,7 @@ $userRole = $isLoggedIn ? $_SESSION['role'] : '';
                 <a href="index.php" class="text-gray-600 hover:text-blue-600 py-1">Shop</a>
                 <a href="#" class="text-gray-600 hover:text-blue-600 py-1">Categories</a>
                 <a href="#" class="text-gray-600 hover:text-blue-600 py-1">About</a>
-                <a href="#" class="text-gray-600 hover:text-blue-600 py-1">Contact</a>
+                <a href="contact.php" class="text-gray-600 hover:text-blue-600 py-1">Contact</a>
                 <div class="flex flex-col space-y-2 pt-2">
                     <?php if ($isLoggedIn): ?>
                         <?php if ($userRole === 'vendor'): ?>
@@ -154,7 +159,7 @@ $userRole = $isLoggedIn ? $_SESSION['role'] : '';
 
         <!-- Success/Error Messages -->
         <div class="container mx-auto px-4 pt-6">
-            <?php 
+            <?php
             echo $logoutMessage;
             echo $loginMessage;
             echo $registerMessage;
@@ -184,8 +189,8 @@ $userRole = $isLoggedIn ? $_SESSION['role'] : '';
         <!-- Search & Filter Bar (Week 3 will make it work) -->
         <div class="container mx-auto px-4 -mt-6">
             <div class="bg-white rounded-lg shadow-md p-4 flex flex-col md:flex-row gap-3">
-                <input type="text" placeholder="Search products..." 
-                       class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" placeholder="Search products..."
+                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <select class="px-4 py-2 border border-gray-300 rounded-lg bg-white">
                     <option>All Categories</option>
                     <option>Electronics</option>
@@ -206,20 +211,20 @@ $userRole = $isLoggedIn ? $_SESSION['role'] : '';
 
         <!-- Welcome Message for Logged-in Users -->
         <?php if ($isLoggedIn): ?>
-        <div class="container mx-auto px-4 py-6">
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p class="text-blue-700">
-                    Welcome back, <strong><?= htmlspecialchars($userEmail) ?></strong>! 
-                    <?php if ($userRole === 'vendor'): ?>
-                        <a href="vendor/dashboard.php" class="text-blue-600 hover:underline ml-2">Go to your vendor dashboard →</a>
-                    <?php elseif ($userRole === 'admin'): ?>
-                        <a href="admin/dashboard.php" class="text-blue-600 hover:underline ml-2">Go to admin panel →</a>
-                    <?php else: ?>
-                        <a href="#" class="text-blue-600 hover:underline ml-2">Start shopping →</a>
-                    <?php endif; ?>
-                </p>
+            <div class="container mx-auto px-4 py-6">
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <p class="text-blue-700">
+                        Welcome back, <strong><?= htmlspecialchars($userEmail) ?></strong>!
+                        <?php if ($userRole === 'vendor'): ?>
+                            <a href="vendor/dashboard.php" class="text-blue-600 hover:underline ml-2">Go to your vendor dashboard →</a>
+                        <?php elseif ($userRole === 'admin'): ?>
+                            <a href="admin/dashboard.php" class="text-blue-600 hover:underline ml-2">Go to admin panel →</a>
+                        <?php else: ?>
+                            <a href="#" class="text-blue-600 hover:underline ml-2">Start shopping →</a>
+                        <?php endif; ?>
+                    </p>
+                </div>
             </div>
-        </div>
         <?php endif; ?>
 
         <!-- Featured Products Section -->
@@ -231,11 +236,11 @@ $userRole = $isLoggedIn ? $_SESSION['role'] : '';
 
             <!-- Product Grid (Responsive: 1 → 2 → 3 → 4 columns) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                
+
                 <!-- Product Card 1 -->
                 <div class="product-card bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition">
-                    <img src="https://placehold.co/400x300/3B82F6/white?text=Headphones" alt="Product" 
-                         class="w-full h-48 object-cover">
+                    <img src="https://placehold.co/400x300/3B82F6/white?text=Headphones" alt="Product"
+                        class="w-full h-48 object-cover">
                     <div class="p-4">
                         <div class="text-xs text-gray-500 mb-1">Electronics</div>
                         <h3 class="font-semibold text-lg text-gray-800">Wireless Headphones</h3>
@@ -255,8 +260,8 @@ $userRole = $isLoggedIn ? $_SESSION['role'] : '';
 
                 <!-- Product Card 2 -->
                 <div class="product-card bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition">
-                    <img src="https://placehold.co/400x300/10B981/white?text=Watch" alt="Product" 
-                         class="w-full h-48 object-cover">
+                    <img src="https://placehold.co/400x300/10B981/white?text=Watch" alt="Product"
+                        class="w-full h-48 object-cover">
                     <div class="p-4">
                         <div class="text-xs text-gray-500 mb-1">Accessories</div>
                         <h3 class="font-semibold text-lg text-gray-800">Smart Watch Pro</h3>
@@ -276,8 +281,8 @@ $userRole = $isLoggedIn ? $_SESSION['role'] : '';
 
                 <!-- Product Card 3 -->
                 <div class="product-card bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition">
-                    <img src="https://placehold.co/400x300/F59E0B/white?text=Jacket" alt="Product" 
-                         class="w-full h-48 object-cover">
+                    <img src="https://placehold.co/400x300/F59E0B/white?text=Jacket" alt="Product"
+                        class="w-full h-48 object-cover">
                     <div class="p-4">
                         <div class="text-xs text-gray-500 mb-1">Clothing</div>
                         <h3 class="font-semibold text-lg text-gray-800">Denim Jacket</h3>
@@ -297,8 +302,8 @@ $userRole = $isLoggedIn ? $_SESSION['role'] : '';
 
                 <!-- Product Card 4 -->
                 <div class="product-card bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition">
-                    <img src="https://placehold.co/400x300/EF4444/white?text=Lamp" alt="Product" 
-                         class="w-full h-48 object-cover">
+                    <img src="https://placehold.co/400x300/EF4444/white?text=Lamp" alt="Product"
+                        class="w-full h-48 object-cover">
                     <div class="p-4">
                         <div class="text-xs text-gray-500 mb-1">Home & Garden</div>
                         <h3 class="font-semibold text-lg text-gray-800">Smart LED Lamp</h3>
@@ -390,9 +395,9 @@ $userRole = $isLoggedIn ? $_SESSION['role'] : '';
                 <div>
                     <h4 class="font-semibold mb-3">Support</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="#" class="hover:text-white">Help Center</a></li>
-                        <li><a href="#" class="hover:text-white">Contact Us</a></li>
-                        <li><a href="#" class="hover:text-white">Returns Policy</a></li>
+                        <li><a href="index.php" class="hover:text-white">Home</a></li>
+                        <li><a href="products/index.php" class="hover:text-white">Shop</a></li>
+                        <li><a href="contact.php" class="hover:text-white">Contact Us</a></li>
                     </ul>
                 </div>
             </div>
@@ -431,4 +436,5 @@ $userRole = $isLoggedIn ? $_SESSION['role'] : '';
         console.log('Bona Markets homepage loaded – Week 1 ready!');
     </script>
 </body>
+
 </html>
