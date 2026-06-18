@@ -9,7 +9,7 @@
 - Bianca    : Buyer Marketplace
 - Amanda    : Shopping Cart
 - Molemo    : Admin Dashboard
-- Lesiamo   : Testing
+- Dan       : Testing
 - Zithobile : Frontend UI
 - Omphile   : Documentation
 
