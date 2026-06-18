@@ -10,7 +10,7 @@
 - Amanda    : Shopping Cart
 - Molemo    : Admin Dashboard
 - Dan       : Testing
-- Zithobile : Frontend UI
+- Lesiamo   : Frontend UI
 - Omphile   : Documentation
 
 ## Setup
