@@ -5,8 +5,10 @@
     Copy this file and rename it to:
     database.php
 
-    Then update the values below to match your computer.
-
+    Then update the values below to match your computer. Remember to install Xampp. 
+    Usually the Xampp defaults below are what your pc uses, unless you deliberately go to change it, and usually there is no password,
+    unless you deliberately go and create one.
+    
     For XAMPP defaults:
     - host = 127.0.0.1
     - dbname = bonamarkets
