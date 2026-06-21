@@ -1,3 +1,5 @@
+-- Please note, this SQL code does not yet have any code about allowing images to be written to it.
+
 CREATE DATABASE IF NOT EXISTS bonamarkets;CREATE DATABASE IF NOT EXISTS;
 DROP TABLE IF EXISTS order_items;
 DROP TABLE IF EXISTS orders;
