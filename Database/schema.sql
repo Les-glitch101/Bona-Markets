@@ -1,4 +1,7 @@
--- Please note, this SQL code does not yet have any code about allowing images to be written to it.
+-- Please note, this SQL code does not yet have any code about allowing images to be written to it. 
+-- This is not a database thing, the code for allowing images to be uploaded will need to be on the page of where the image will need to be uploaded.
+-- So for example, on the vendor apply form, if a logo is needed, the upload part must be coded there. Same for the marketplace/products created by the vendors.
+-- So if you need an image to be uploaded by a user, you will have to code it in your php code, and make sure you connect it via POST to the database.php file. 
 
 CREATE DATABASE IF NOT EXISTS bonamarkets;CREATE DATABASE IF NOT EXISTS;
 DROP TABLE IF EXISTS order_items;
