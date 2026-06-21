@@ -32,7 +32,7 @@
 
 **Week 3 Focus:** Product Management + Buyer Marketplace
 
-**Dates:** [Start Date] to [End Date]
+**Dates:** [2026/06/22] to [2026/06/26]
 
 **Status:** ⬜ In Progress | ✅ Complete | ❌ Blocked
 
@@ -296,6 +296,4 @@ By the end of Week 3:
 
 ---
 
-**Last Updated:** [Date]
-
-**Next Standup:** [Time]
+**Last Updated:** [2026/06/15]
