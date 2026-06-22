@@ -1,21 +1,79 @@
 <?php
-// Start session for future PHP integration (Week 2)
+// ============================================================
+// LOGIN PAGE – Stores full name in session
+// ============================================================
+
 session_start();
 
-// Week 1: This is a static demo page
-// Week 2: This will connect to database and real authentication
-
-// If user is already logged in (Week 2+), redirect to appropriate dashboard
+// Redirect if already logged in
 if (isset($_SESSION['user_id'])) {
     if ($_SESSION['role'] === 'admin') {
-        header('Location: /admin/dashboard.php');
+        header('Location: admin/dashboard.php');
         exit;
-    } elseif ($_SESSION['role'] === 'vendor') {
-        header('Location: /vendor/dashboard.php');
+    } if ($user['role'] === 'vendor') {
+    // Check if vendor has a profile
+    $stmt = $pdo->prepare("SELECT * FROM vendor_profiles WHERE user_id = ?");
+    $stmt->execute([$user['id']]);
+    $vendorProfile = $stmt->fetch();
+    
+    if (!$vendorProfile) {
+        // Vendor registered but hasn't applied yet
+        header('Location: apply.php');
+        exit;
+    } elseif ($vendorProfile['approved'] == 0) {
+        // Application pending
+        header('Location: apply.php');
         exit;
     } else {
-        header('Location: /index.php');
+        // Approved vendor
+        header('Location: vendor/dashboard.php');
         exit;
+    }
+    
+    } else {
+        header('Location: index.php');
+        exit;
+    }
+}
+
+// Include database connection
+require_once '../config/database.php';
+
+$error = '';
+
+// Handle login form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+    
+    if (!empty($email) && !empty($password)) {
+        // Query user by email
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        $user = $stmt->fetch();
+        
+        // Verify password
+        if ($user && $password === $user['passwordHash']) {
+            // Store ALL user data in session
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['email'] = $user['email'];
+            $_SESSION['fullname'] = $user['fullname'];  // ← ADD FULL NAME
+            $_SESSION['role'] = $user['role'];
+            
+            // Redirect based on role
+            if ($user['role'] === 'admin') {
+                header('Location: admin/dashboard.php');
+            } elseif ($user['role'] === 'vendor') {
+                header('Location: vendor/dashboard.php');
+            } else {
+                header('Location: index.php?login=success');
+            }
+            exit;
+        } else {
+            $error = 'Invalid email or password.';
+        }
+    } else {
+        $error = 'Please enter both email and password.';
     }
 }
 ?>
@@ -26,24 +84,16 @@ if (isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Login | Bona Markets</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Custom font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        }
-        input {
-            transition: all 0.2s ease;
-        }
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        input { transition: all 0.2s ease; }
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- ========== MAIN CONTENT ========== -->
+
     <main class="min-h-screen flex items-center justify-center py-12 px-4">
-        
-        <!-- Login Card -->
         <div class="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
             
             <!-- Card Header -->
@@ -63,18 +113,20 @@ if (isset($_SESSION['user_id'])) {
                 <!-- Demo Alert -->
                 <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6">
                     <p class="text-blue-700 text-xs text-center">
-                        🔐 <span class="font-medium">Demo Mode:</span> Enter any email/password to simulate login
-                        <br>(Real authentication coming in Week 2)
+                        🔐 <span class="font-medium">MySQL Database:</span> Use demo@bonamarkets.com / demo123
+                        <br>Or register a new account below
                     </p>
                 </div>
                 
-                <!-- Login Form -->
-                <form id="loginForm" onsubmit="handleLogin(event)">
-                    <!-- Email Field -->
+                <?php if ($error): ?>
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                        <p class="text-red-600 text-sm text-center"><?= htmlspecialchars($error) ?></p>
+                    </div>
+                <?php endif; ?>
+                
+                <form method="POST" action="">
                     <div class="mb-5">
-                        <label for="email" class="block text-gray-700 font-medium mb-2">
-                            Email Address
-                        </label>
+                        <label for="email" class="block text-gray-700 font-medium mb-2">Email Address</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,15 +141,12 @@ if (isset($_SESSION['user_id'])) {
                         </div>
                     </div>
                     
-                    <!-- Password Field -->
                     <div class="mb-5">
-                        <label for="password" class="block text-gray-700 font-medium mb-2">
-                            Password
-                        </label>
+                        <label for="password" class="block text-gray-700 font-medium mb-2">Password</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin" round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                                 </svg>
                             </div>
                             <input type="password" id="password" name="password" 
@@ -117,7 +166,6 @@ if (isset($_SESSION['user_id'])) {
                         </div>
                     </div>
                     
-                    <!-- Remember Me -->
                     <div class="flex items-center justify-between mb-6">
                         <label class="flex items-center">
                             <input type="checkbox" class="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
@@ -125,22 +173,10 @@ if (isset($_SESSION['user_id'])) {
                         </label>
                     </div>
                     
-                    <!-- Error Message -->
-                    <div id="errorMessage" class="hidden bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-                        <p class="text-red-600 text-sm text-center" id="errorText"></p>
-                    </div>
-                    
-                    <!-- Success Message -->
-                    <div id="successMessage" class="hidden bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
-                        <p class="text-green-600 text-sm text-center" id="successText">Login successful! Redirecting...</p>
-                    </div>
-                    
-                    <!-- Login Button -->
                     <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition transform active:scale-98">
                         Sign In
                     </button>
                     
-                    <!-- Divider -->
                     <div class="relative my-6">
                         <div class="absolute inset-0 flex items-center">
                             <div class="w-full border-t border-gray-300"></div>
@@ -150,7 +186,6 @@ if (isset($_SESSION['user_id'])) {
                         </div>
                     </div>
                     
-                    <!-- Social Login -->
                     <div class="grid grid-cols-2 gap-3">
                         <button type="button" class="flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-50 transition">
                             <svg class="h-5 w-5" viewBox="0 0 24 24">
@@ -169,7 +204,6 @@ if (isset($_SESSION['user_id'])) {
                         </button>
                     </div>
                     
-                    <!-- Sign Up Link -->
                     <p class="text-center text-gray-600 text-sm mt-6">
                         Don't have an account?
                         <a href="register.php" class="text-blue-600 font-semibold hover:underline">Sign up</a>
@@ -179,19 +213,7 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </main>
 
-    <!-- ========== JAVASCRIPT ========== -->
     <script>
-        // Mobile Menu Toggle
-        const menuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        if (menuBtn && mobileMenu) {
-            menuBtn.addEventListener('click', function() {
-                mobileMenu.classList.toggle('hidden');
-            });
-        }
-
-        // Toggle Password Visibility
         const togglePassword = document.getElementById('togglePassword');
         const passwordInput = document.getElementById('password');
 
@@ -200,7 +222,6 @@ if (isset($_SESSION['user_id'])) {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);
                 
-                // Change icon (simple visual feedback)
                 if (type === 'text') {
                     togglePassword.innerHTML = `<svg class="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
@@ -213,53 +234,6 @@ if (isset($_SESSION['user_id'])) {
                 }
             });
         }
-
-        // Handle Login Form Submission
-        function handleLogin(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorDiv = document.getElementById('errorMessage');
-            const errorText = document.getElementById('errorText');
-            const successDiv = document.getElementById('successMessage');
-            
-            // Hide previous messages
-            errorDiv.classList.add('hidden');
-            successDiv.classList.add('hidden');
-            
-            // Basic validation
-            if (!email || !password) {
-                errorText.innerText = 'Please enter both email and password';
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-            
-            if (!email.includes('@')) {
-                errorText.innerText = 'Please enter a valid email address';
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-            
-            if (password.length < 3) {
-                errorText.innerText = 'Password must be at least 3 characters';
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-            
-            // Week 1: Demo mode – simulate successful login
-            console.log('Demo login:', { email, password });
-            
-            // Show success message
-            successDiv.classList.remove('hidden');
-            
-            // Redirect to index.php (homepage) after 1.5 seconds
-            setTimeout(function() {
-                window.location.href = 'index.php';  // ← Fixed: now points to .php
-            }, 1500);
-        }
-        
-        console.log('Login page loaded – redirects to index.php');
     </script>
 </body>
 </html>
