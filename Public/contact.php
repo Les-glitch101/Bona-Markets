@@ -1,8 +1,17 @@
 <?php
-// Start session for potential login status (optional)
-session_start();
-?>
+// ============================================================
+// CONTACT PAGE – With Session Integration
+// ============================================================
 
+// Start session to check login status
+session_start();
+
+// Get user info from session
+$isLoggedIn = isset($_SESSION['user_id']);
+$userFullName = $isLoggedIn ? $_SESSION['fullname'] : '';
+$userEmail = $isLoggedIn ? $_SESSION['email'] : '';
+$userRole = $isLoggedIn ? $_SESSION['role'] : '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,13 +28,6 @@ session_start();
     <style>
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        }
-        .product-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
         }
         input:focus, textarea:focus, select:focus {
             outline: none;
@@ -53,7 +55,7 @@ session_start();
 <body class="bg-gray-50">
 
     <!-- ============================================================ -->
-    <!-- NAVBAR (Same as main site) -->
+    <!-- NAVBAR (Dynamic based on login status) -->
     <!-- ============================================================ -->
     <nav class="bg-white shadow-md sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3">
@@ -67,16 +69,29 @@ session_start();
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="index.php" class="text-gray-600 hover:text-blue-600 font-medium">Shop</a>
                     <a href="#" class="text-gray-600 hover:text-blue-600 font-medium">Categories</a>
-                    <a href="#" class="text-gray-600 hover:text-blue-600 font-medium">About</a>
+                    <a href="about.php" class="text-gray-600 hover:text-blue-600 font-medium">About</a>
                     <a href="contact.php" class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-0.5">Contact</a>
                 </div>
 
-                <!-- Desktop Auth Buttons -->
+                <!-- Desktop Auth Buttons (Dynamic) -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="login.php" class="text-blue-600 hover:text-blue-800 font-medium">Login</a>
-                    <a href="register.php" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition">
-                        Sign Up
-                    </a>
+                    <?php if ($isLoggedIn): ?>
+                        <?php if ($userRole === 'vendor'): ?>
+                            <a href="vendor/dashboard.php" class="text-gray-600 hover:text-blue-600 font-medium">Vendor Dashboard</a>
+                        <?php endif; ?>
+                        <?php if ($userRole === 'admin'): ?>
+                            <a href="admin/dashboard.php" class="text-gray-600 hover:text-blue-600 font-medium">Admin Panel</a>
+                        <?php endif; ?>
+                        <a href="cart/index.php" class="text-gray-600 hover:text-blue-600 font-medium">Cart 🛒</a>
+                        <a href="orders/index.php" class="text-gray-600 hover:text-blue-600 font-medium">Orders</a>
+                        <span class="text-gray-600">👋 <?= htmlspecialchars($userFullName ?: $userEmail) ?></span>
+                        <a href="logout.php" class="text-red-500 hover:text-red-700 font-medium">Logout</a>
+                    <?php else: ?>
+                        <a href="login.php" class="text-gray-600 hover:text-blue-600 font-medium">Login</a>
+                        <a href="register.php" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Sign Up
+                        </a>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Mobile Menu Button -->
@@ -94,8 +109,21 @@ session_start();
                 <a href="#" class="text-gray-600 hover:text-blue-600 py-1">About</a>
                 <a href="contact.php" class="text-blue-600 font-semibold py-1">Contact</a>
                 <div class="flex flex-col space-y-2 pt-2">
-                    <a href="login.php" class="text-blue-600 font-medium py-1">Login</a>
-                    <a href="register.php" class="bg-blue-600 text-white text-center px-4 py-2 rounded-lg">Sign Up</a>
+                    <?php if ($isLoggedIn): ?>
+                        <?php if ($userRole === 'vendor'): ?>
+                            <a href="vendor/dashboard.php" class="text-gray-600 py-1">Vendor Dashboard</a>
+                        <?php endif; ?>
+                        <?php if ($userRole === 'admin'): ?>
+                            <a href="admin/dashboard.php" class="text-gray-600 py-1">Admin Panel</a>
+                        <?php endif; ?>
+                        <a href="cart/index.php" class="text-gray-600 py-1">Cart 🛒</a>
+                        <a href="orders/index.php" class="text-gray-600 py-1">Orders</a>
+                        <span class="text-gray-600 py-1">👋 <?= htmlspecialchars($userFullName ?: $userEmail) ?></span>
+                        <a href="logout.php" class="text-red-500 py-1">Logout</a>
+                    <?php else: ?>
+                        <a href="login.php" class="text-gray-600 hover:text-blue-600 py-1">Login</a>
+                        <a href="register.php" class="bg-blue-600 text-white text-center px-4 py-2 rounded-lg">Sign Up</a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -114,6 +142,11 @@ session_start();
                 <br class="hidden sm:block" />
                 Our team is here to help.
             </p>
+            <?php if ($isLoggedIn): ?>
+                <p class="mt-4 text-sm text-blue-100">
+                    👋 Welcome, <strong><?= htmlspecialchars($userFullName ?: $userEmail) ?></strong>! We're here to help.
+                </p>
+            <?php endif; ?>
         </div>
     </section>
 
@@ -134,9 +167,13 @@ session_start();
                     <!-- Demo Alert -->
                     <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6">
                         <p class="text-blue-700 text-xs text-center">
-                            📬 <span class="font-medium">Demo Mode:</span> This form is for demonstration purposes.
-                            <br class="sm:hidden" />
-                            <span class="hidden sm:inline">Submissions will show a success message.</span>
+                            <?php if ($isLoggedIn): ?>
+                                📬 <span class="font-medium">Welcome back!</span> Your name and email are pre-filled.
+                            <?php else: ?>
+                                📬 <span class="font-medium">Demo Mode:</span> This form is for demonstration purposes.
+                                <br class="sm:hidden" />
+                                <span class="hidden sm:inline">Submissions will show a success message.</span>
+                            <?php endif; ?>
                         </p>
                     </div>
 
@@ -149,7 +186,13 @@ session_start();
                                 </label>
                                 <input type="text" id="contactName" name="name"
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                       placeholder="Your name" required />
+                                       placeholder="Your name"
+                                       value="<?= htmlspecialchars($userFullName) ?>"
+                                       <?= $isLoggedIn ? 'readonly style="background:#f3f4f6;"' : '' ?>
+                                       required />
+                                <?php if ($isLoggedIn): ?>
+                                    <p class="text-xs text-gray-400 mt-1">Prefilled from your account</p>
+                                <?php endif; ?>
                             </div>
                             <div>
                                 <label for="contactEmail" class="block text-gray-700 font-medium mb-2">
@@ -157,7 +200,13 @@ session_start();
                                 </label>
                                 <input type="email" id="contactEmail" name="email"
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                       placeholder="you@example.com" required />
+                                       placeholder="you@example.com"
+                                       value="<?= htmlspecialchars($userEmail) ?>"
+                                       <?= $isLoggedIn ? 'readonly style="background:#f3f4f6;"' : '' ?>
+                                       required />
+                                <?php if ($isLoggedIn): ?>
+                                    <p class="text-xs text-gray-400 mt-1">Prefilled from your account</p>
+                                <?php endif; ?>
                             </div>
                         </div>
 
@@ -408,7 +457,7 @@ session_start();
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">
-                <p>&copy; 2025 Bona Markets. All rights reserved.</p>
+                <p>&copy; 2026 Bona Markets. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -417,7 +466,7 @@ session_start();
     <!-- JAVASCRIPT -->
     <!-- ============================================================ -->
     <script>
-        // Mobile Menu Toggle
+        // ===== Mobile Menu Toggle =====
         const menuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
 
@@ -427,7 +476,7 @@ session_start();
             });
         }
 
-        // Contact Form Handler
+        // ===== Contact Form Handler =====
         function handleContactForm(event) {
             event.preventDefault();
 
@@ -481,7 +530,8 @@ session_start();
             }, 5000);
         }
 
-        console.log('Bona Markets Contact page loaded!');
+        console.log('Bona Markets Contact page loaded with session support!');
     </script>
+
 </body>
 </html>
