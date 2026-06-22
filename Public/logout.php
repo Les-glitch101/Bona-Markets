@@ -1,19 +1,14 @@
 <?php
-/**
- * Bona Markets - Logout Page
- * Destroys user session and redirects to homepage
- * 
- * Week 1: Basic logout functionality
- * Week 2+: Will work with database sessions
- */
+// ============================================================
+// LOGOUT PAGE – Destroy session
+// ============================================================
 
-// Start session to destroy it
 session_start();
 
 // Clear all session variables
 $_SESSION = array();
 
-// If using session cookies, delete the session cookie
+// Destroy the session cookie
 if (ini_get("session.use_cookies")) {
     $params = session_get_cookie_params();
     setcookie(
@@ -27,10 +22,10 @@ if (ini_get("session.use_cookies")) {
     );
 }
 
-// Destroy the session completely
+// Destroy the session
 session_destroy();
 
-// Redirect to homepage with logout success message
+// Redirect to homepage with logout message
 header('Location: index.php?logout=success');
 exit;
 ?>
