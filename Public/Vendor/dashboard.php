@@ -1237,7 +1237,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                     <h4 class="footer-heading">Vendor Support</h4>
                     <ul class="footer-links">
                         <li><a href="#" onclick="showToast('Help Center coming soon!','warning')">Help Center</a></li>
-                        <li><a href="#" onclick="showToast('Contact support: vendor@bonamarkets.com','success')">Contact Us</a></li>
+                        <li><a href="../contact.php" onclick="showToast('Contact support: vendor@bonamarkets.com','success')">Contact Us</a></li>
                     </ul>
                 </div>
 
