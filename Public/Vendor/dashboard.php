@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-// VENDOR DASHBOARD – Complete Single File
+// VENDOR DASHBOARD – Complete Single File (FIXED)
 // ============================================================
 
 // Enable error reporting for debugging
@@ -23,8 +23,7 @@ if ($_SESSION['role'] !== 'vendor' && $_SESSION['role'] !== 'admin') {
 }
 
 // ─── DATABASE CONNECTION ─────────────────────────────────────
-// For XAMPP: from Public/vendor/ go up 2 levels to Config/
-require_once '../../config/database.php';
+require_once '../../Config/database.php';
 
 $user_id = $_SESSION['user_id'];
 $userFullName = $_SESSION['fullname'] ?? 'Vendor';
@@ -35,13 +34,11 @@ $stmt = $pdo->prepare("SELECT * FROM vendor_profiles WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $vendor = $stmt->fetch();
 
-// If vendor has no profile, redirect to apply page
 if (!$vendor) {
     header('Location: /Bona-Markets/Public/apply.php');
     exit;
 }
 
-// If vendor is not approved, show pending message
 $pendingApproval = ($vendor['approved'] == 0);
 
 // ─── GET PRODUCT STATS ──────────────────────────────────────────
@@ -115,9 +112,8 @@ $stmt = $pdo->prepare("
 $stmt->execute([$user_id]);
 $products = $stmt->fetchAll();
 
-// ─── GET STORE RATING (placeholder until reviews are implemented) ──
-$storeRating = 4.8;
-$reviewCount = 12;
+// ─── GET CATEGORIES ─────────────────────────────────────────────
+$categories = $pdo->query("SELECT * FROM categories ORDER BY name")->fetchAll();
 
 // ─── GET GREETING ────────────────────────────────────────────────
 $hour = date('H');
@@ -129,10 +125,7 @@ if ($hour < 12) {
     $greeting = 'evening';
 }
 
-// ─── GET CATEGORIES FOR DROPDOWN ────────────────────────────────
-$categories = $pdo->query("SELECT * FROM categories ORDER BY name")->fetchAll();
-
-// ─── HANDLE ADD PRODUCT FORM SUBMISSION ─────────────────────────
+// ─── HANDLE ADD PRODUCT FORM ────────────────────────────────────
 $addError = '';
 $addSuccess = '';
 $newProductId = null;
@@ -234,7 +227,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
     <link rel="stylesheet" href="../assets/css/vendor-dashboard.css" />
 
     <style>
-        /* Alert messages */
         .alert-success {
             background: #e8f5ee;
             border: 1px solid #3a7d5e;
@@ -251,8 +243,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
             margin-bottom: 1.5rem;
             color: #c04b1e;
         }
-        
-        /* Image preview styles */
         .upload-zone {
             border: 2px dashed var(--border);
             border-radius: var(--radius-lg);
@@ -300,8 +290,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
         .image-preview .remove-btn:hover {
             color: #a03a15;
         }
-        
-        /* Product thumbnail image */
         .product-thumb img {
             width: 100%;
             height: 100%;
@@ -326,9 +314,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
     <header class="topbar">
         <div class="container">
             <div class="topbar-inner">
-                <!-- LEFT: Hamburger + Brand -->
                 <div style="display:flex;align-items:center;gap:0.75rem;">
-                    <!-- HAMBURGER TOGGLE (visible on mobile) -->
                     <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()"
                         aria-label="Toggle navigation">
                         <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
@@ -338,14 +324,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                             <line x1="3" y1="18" x2="21" y2="18" />
                         </svg>
                     </button>
-
                     <div class="brand">
                         <span class="brand-dot"></span>
                         Bona<span>Markets</span>
                     </div>
                 </div>
-
-                <!-- RIGHT: Badge + Notif + Avatar -->
                 <div class="topbar-right">
                     <span class="topbar-badge">Vendor Portal</span>
                     <button class="notif-btn" onclick="showToast('You have <?= $pendingOrders ?> pending orders!','warning')">
@@ -373,10 +356,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
         <!-- SIDEBAR -->
         <!-- ============================================================ -->
         <nav class="sidebar" id="sidebar">
-            <!-- Close button (visible on mobile) -->
             <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
 
-            <!-- Section: Overview -->
             <span class="sidebar-section-label">Overview</span>
             <a class="nav-item active" onclick="navigate('dashboard',this)">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -388,7 +369,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                 <span>Dashboard</span>
             </a>
 
-            <!-- Section: Store -->
             <span class="sidebar-section-label">Store</span>
             <a class="nav-item" onclick="navigate('products',this)">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -417,7 +397,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
 
             <div class="sidebar-divider"></div>
 
-            <!-- Section: Finance -->
             <span class="sidebar-section-label">Finance</span>
             <a class="nav-item" onclick="navigate('payouts',this)">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -429,7 +408,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
 
             <div class="sidebar-divider"></div>
 
-            <!-- Section: Account -->
             <span class="sidebar-section-label">Account</span>
             <a class="nav-item" onclick="navigate('reviews',this)">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -458,13 +436,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
             <!-- ============================================================ -->
             <div class="page active" id="page-dashboard">
 
-                <!-- Page Header -->
                 <div class="page-header">
                     <div>
                         <h1 class="page-title">Good <?= $greeting ?>, <?= htmlspecialchars($userFullName) ?> 👋</h1>
                         <p class="page-sub">Here's what's happening with your store today.</p>
                     </div>
-                    <button class="btn btn-primary" onclick="navigate('add-product', document.querySelector('[onclick*=\" add-product\"]'))">
+                    <button class="btn btn-primary" onclick="navigate('add-product', this)">
                         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                             <line x1="12" y1="5" x2="12" y2="19" />
                             <line x1="5" y1="12" x2="19" y2="12" />
@@ -484,26 +461,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                     </div>
                 <?php endif; ?>
 
-                <!-- Stats Grid -->
                 <div class="stats-grid">
                     <div class="stat-card gold">
                         <div class="stat-label">Total Revenue</div>
                         <div class="stat-value">R <?= number_format($totalRevenue, 2) ?></div>
-                        <div class="stat-delta delta-up">
-                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                <polyline points="18 15 12 9 6 15" />
-                            </svg>
-                            All time earnings
-                        </div>
+                        <div class="stat-delta delta-up">All time earnings</div>
                     </div>
                     <div class="stat-card rust">
                         <div class="stat-label">Active Orders</div>
                         <div class="stat-value"><?= $pendingOrders + $shippedOrders ?></div>
                         <div class="stat-delta <?= $pendingOrders > 0 ? 'delta-up' : '' ?>">
                             <?php if ($pendingOrders > 0): ?>
-                                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                    <polyline points="18 15 12 9 6 15" />
-                                </svg>
                                 <?= $pendingOrders ?> awaiting shipment
                             <?php else: ?>
                                 All orders processed
@@ -515,14 +483,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                         <div class="stat-value"><?= $productCount ?></div>
                         <div class="stat-delta <?= $lowStock > 0 ? 'delta-down' : 'delta-up' ?>">
                             <?php if ($lowStock > 0): ?>
-                                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                    <polyline points="6 9 12 15 18 9" />
-                                </svg>
                                 <?= $lowStock ?> low in stock
                             <?php else: ?>
-                                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                    <polyline points="18 15 12 9 6 15" />
-                                </svg>
                                 All stocked up
                             <?php endif; ?>
                         </div>
@@ -534,9 +496,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                     </div>
                 </div>
 
-                <!-- Charts + Recent Orders -->
                 <div class="dashboard-grid">
-                    <!-- Sales Chart -->
                     <div class="card">
                         <div class="card-header">
                             <span class="card-title">Sales — Last 7 Days</span>
@@ -555,11 +515,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                         <?php endif; ?>
                     </div>
 
-                    <!-- Recent Orders -->
                     <div class="card">
                         <div class="card-header">
                             <span class="card-title">Recent Orders</span>
-                            <button class="btn btn-outline btn-sm" onclick="navigate('orders', document.querySelector('[onclick*=\" orders\"]'))">View all</button>
+                            <button class="btn btn-outline btn-sm" onclick="navigate('orders', this)">View all</button>
                         </div>
                         <div class="table-wrap">
                             <?php if (count($recentOrders) > 0): ?>
@@ -614,7 +573,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                         <h1 class="page-title">My Products</h1>
                         <p class="page-sub">Manage your listed items and inventory.</p>
                     </div>
-                    <button class="btn btn-primary" onclick="navigate('add-product', document.querySelector('[onclick*=\" add-product\"]'))">
+                    <button class="btn btn-primary" onclick="navigate('add-product', this)">
                         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                             <line x1="12" y1="5" x2="12" y2="19" />
                             <line x1="5" y1="12" x2="19" y2="12" />
@@ -623,7 +582,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                     </button>
                 </div>
 
-                <!-- Toolbar -->
                 <div class="toolbar">
                     <div class="search-wrap">
                         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -647,7 +605,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                     </select>
                 </div>
 
-                <!-- Product Grid -->
                 <?php if (count($products) > 0): ?>
                     <div class="product-grid" id="product-grid">
                         <?php foreach ($products as $product): ?>
@@ -676,7 +633,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                                     </div>
                                     <div class="product-price">R <?= number_format($product['price'], 2) ?></div>
                                     <div class="product-actions">
-                                        <button class="btn btn-outline btn-sm" onclick="showToast('Opening editor for <?= htmlspecialchars($product['name']) ?>','warning')">Edit</button>
+                                        <button class="btn btn-outline btn-sm" onclick="showToast('Edit <?= htmlspecialchars($product['name']) ?> coming soon','warning')">Edit</button>
                                         <button class="btn-icon" onclick="showToast('<?= htmlspecialchars($product['name']) ?> duplicated','success')" title="Duplicate">
                                             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                 <rect x="9" y="9" width="13" height="13" rx="2" />
@@ -700,7 +657,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                     <div class="empty-state">
                         <div class="icon">📦</div>
                         <p>You haven't listed any products yet.</p>
-                        <button class="btn btn-primary" onclick="navigate('add-product', document.querySelector('[onclick*=\" add-product\"]'))">
+                        <button class="btn btn-primary" onclick="navigate('add-product', this)">
                             Add Your First Product
                         </button>
                     </div>
@@ -717,7 +674,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                         <h1 class="page-title">Add New Product</h1>
                         <p class="page-sub">List a new item in your store.</p>
                     </div>
-                    <button class="btn btn-outline" onclick="navigate('products', document.querySelector('[onclick*=\" products\"]'))">← Back to Products</button>
+                    <button class="btn btn-outline" onclick="navigate('products', this)">← Back to Products</button>
                 </div>
 
                 <?php if ($addError): ?>
@@ -741,9 +698,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                     <input type="hidden" name="add_product" value="1" />
                     
                     <div class="add-product-grid">
-                        <!-- Left Column -->
                         <div>
-                            <!-- Product Details -->
                             <div class="card">
                                 <div class="card-header"><span class="card-title">Product Details</span></div>
                                 <div class="form-grid">
@@ -776,7 +731,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                                 </div>
                             </div>
 
-                            <!-- Pricing & Inventory -->
                             <div class="card">
                                 <div class="card-header"><span class="card-title">Pricing & Inventory</span></div>
                                 <div class="form-grid">
@@ -815,9 +769,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                             </div>
                         </div>
 
-                        <!-- Right Column -->
                         <div>
-                            <!-- Product Images -->
                             <div class="card">
                                 <div class="card-header"><span class="card-title">Product Images</span></div>
                                 <div class="upload-zone" id="uploadZone">
@@ -832,7 +784,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                                 </div>
                             </div>
 
-                            <!-- Status & Visibility -->
                             <div class="card">
                                 <div class="card-header"><span class="card-title">Status & Visibility</span></div>
                                 <div class="form-group" style="margin-bottom:1rem">
@@ -858,7 +809,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                                 </div>
                             </div>
 
-                            <!-- Action Buttons -->
                             <div class="action-buttons">
                                 <button type="submit" class="btn btn-primary" style="flex:1">Save Product</button>
                                 <button type="button" class="btn btn-outline" onclick="saveDraft()">Save Draft</button>
@@ -869,7 +819,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
             </div>
 
             <!-- ============================================================ -->
-            <!-- PAGE: ORDERS -->
+            <!-- PAGE: ORDERS (EMPTY - NO DEMO DATA) -->
             <!-- ============================================================ -->
             <div class="page" id="page-orders">
 
@@ -880,7 +830,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                     </div>
                 </div>
 
-                <!-- Toolbar -->
                 <div class="toolbar">
                     <div class="search-wrap">
                         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -898,7 +847,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                     </select>
                 </div>
 
-                <!-- Orders Table -->
                 <div class="card card-table">
                     <div class="table-wrap">
                         <table>
@@ -913,44 +861,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="orders-tbody">
-                                <?php if (count($recentOrders) > 0): ?>
-                                    <?php foreach ($recentOrders as $order): ?>
-                                        <tr>
-                                            <td><span class="order-id">#BM-<?= str_pad($order['id'], 4, '0', STR_PAD_LEFT) ?></span></td>
-                                            <td>
-                                                <div class="customer-cell">
-                                                    <div class="customer-avatar"><?= strtoupper(substr($order['customer_name'] ?? 'G', 0, 2)) ?></div>
-                                                    <?= htmlspecialchars($order['customer_name'] ?? 'Guest') ?>
-                                                </div>
-                                            </td>
-                                            <td><?= htmlspecialchars($order['products'] ?? '—') ?></td>
-                                            <td style="color:var(--muted);font-size:.84rem"><?= date('d M Y', strtotime($order['created_at'])) ?></td>
-                                            <td><span class="amount-cell">R <?= number_format($order['total'], 2) ?></span></td>
-                                            <td>
-                                                <?php
-                                                $statusClass = match ($order['status']) {
-                                                    'pending' => 'badge-warning',
-                                                    'shipped' => 'badge-neutral',
-                                                    'delivered' => 'badge-success',
-                                                    default => 'badge-danger'
-                                                };
-                                                ?>
-                                                <span class="badge <?= $statusClass ?>">
-                                                    <span class="badge-dot"></span>
-                                                    <?= ucfirst($order['status']) ?>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-outline btn-sm" onclick="openOrderModal('<?= $order['id'] ?>')">View</button>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <tr>
-                                        <td colspan="7" style="text-align:center;color:var(--muted);padding:1rem;">No orders yet</td>
-                                    </tr>
-                                <?php endif; ?>
+                            <tbody>
+                                <tr>
+                                    <td colspan="7" style="text-align:center;color:var(--muted);padding:2rem;">
+                                        <div style="font-size:2rem;margin-bottom:0.5rem;">📦</div>
+                                        <p style="font-weight:500;color:var(--ink);">No orders yet</p>
+                                        <p style="font-size:.85rem;">When customers place orders, they'll appear here.</p>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -970,7 +888,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                     <button class="btn btn-primary" onclick="openWithdrawModal()">Request Payout</button>
                 </div>
 
-                <!-- Payout Banner -->
                 <div class="payout-banner">
                     <div>
                         <div class="payout-label">Available Balance</div>
@@ -985,7 +902,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                     </div>
                 </div>
 
-                <!-- Payout Stats -->
                 <div class="stats-grid">
                     <div class="stat-card gold">
                         <div class="stat-label">This Month</div>
@@ -1004,7 +920,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                     </div>
                 </div>
 
-                <!-- Payout History -->
                 <div class="card">
                     <div class="card-header"><span class="card-title">Payout History</span></div>
                     <div class="table-wrap">
@@ -1018,23 +933,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                                     <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody id="payouts-tbody">
-                                <?php
-                                $payoutHistory = [
-                                    ['date' => date('d F Y', strtotime('-30 days')), 'ref' => '#PAY-0019', 'method' => 'FNB Bank Account', 'amount' => $totalRevenue * 0.3, 'status' => 'Paid'],
-                                    ['date' => date('d F Y', strtotime('-60 days')), 'ref' => '#PAY-0018', 'method' => 'FNB Bank Account', 'amount' => $totalRevenue * 0.25, 'status' => 'Paid'],
-                                    ['date' => date('d F Y', strtotime('-90 days')), 'ref' => '#PAY-0017', 'method' => 'FNB Bank Account', 'amount' => $totalRevenue * 0.2, 'status' => 'Paid'],
-                                ];
-                                foreach ($payoutHistory as $payout):
-                                ?>
-                                    <tr>
-                                        <td><?= $payout['date'] ?></td>
-                                        <td style="font-family:'Syne',sans-serif;font-weight:700"><?= $payout['ref'] ?></td>
-                                        <td><?= $payout['method'] ?></td>
-                                        <td class="amount-cell">R <?= number_format($payout['amount'], 2) ?></td>
-                                        <td><span class="badge badge-success"><span class="badge-dot"></span><?= $payout['status'] ?></span></td>
-                                    </tr>
-                                <?php endforeach; ?>
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" style="text-align:center;color:var(--muted);padding:1.5rem;">
+                                        <p style="font-weight:500;color:var(--ink);">No payout history yet</p>
+                                        <p style="font-size:.85rem;">Payouts will appear here once you start earning.</p>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -1053,7 +958,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                     </div>
                 </div>
 
-                <!-- Review Stats -->
                 <div class="stats-grid reviews-stats">
                     <div class="stat-card gold">
                         <div class="stat-label">Overall Rating</div>
@@ -1075,20 +979,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                     </div>
                 </div>
 
-                <!-- Review List -->
                 <div class="card">
                     <div class="card-header">
                         <span class="card-title">All Reviews</span>
                         <span style="font-size:.78rem;color:var(--muted);">0 reviews total</span>
                     </div>
-
                     <div style="text-align:center;padding:2.5rem 1rem;color:var(--muted);">
                         <div style="font-size:3rem;margin-bottom:.75rem;">⭐</div>
                         <p style="font-size:.9rem;font-weight:500;color:var(--ink);">No reviews yet</p>
                         <p style="font-size:.82rem;">When customers review your products, they'll appear here.</p>
-                        <p style="font-size:.75rem;margin-top:.5rem;color:var(--border);">
-                            Reviews will be available once the platform is fully launched.
-                        </p>
                     </div>
                 </div>
             </div>
@@ -1106,7 +1005,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                     <button class="btn btn-primary" onclick="saveSettings()">Save Changes</button>
                 </div>
 
-                <!-- Store Hero -->
                 <div class="store-hero">
                     <div class="store-logo">🛍️</div>
                     <div class="store-info">
@@ -1116,7 +1014,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                 </div>
 
                 <div class="settings-grid">
-                    <!-- Left Column: Store Profile -->
                     <div>
                         <div class="card">
                             <div class="card-header"><span class="card-title">Store Profile</span></div>
@@ -1145,9 +1042,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                         </div>
                     </div>
 
-                    <!-- Right Column: Banking + Notifications -->
                     <div>
-                        <!-- Banking Details -->
                         <div class="card">
                             <div class="card-header"><span class="card-title">Banking Details</span></div>
                             <div class="form-grid">
@@ -1177,7 +1072,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                             </div>
                         </div>
 
-                        <!-- Notifications -->
                         <div class="card">
                             <div class="card-header"><span class="card-title">Notifications</span></div>
                             <div class="toggle-wrap">
@@ -1224,7 +1118,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                     <h3 class="footer-brand">Bona <span>Markets</span></h3>
                     <p class="footer-desc">Your trusted multi-vendor marketplace for authentic African goods.</p>
                 </div>
-
                 <div>
                     <h4 class="footer-heading">Quick Links</h4>
                     <ul class="footer-links">
@@ -1232,7 +1125,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                         <li><a href="dashboard.php">Vendor Dashboard</a></li>
                     </ul>
                 </div>
-
                 <div>
                     <h4 class="footer-heading">Vendor Support</h4>
                     <ul class="footer-links">
@@ -1240,7 +1132,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
                         <li><a href="../contact.php" onclick="showToast('Contact support: vendor@bonamarkets.com','success')">Contact Us</a></li>
                     </ul>
                 </div>
-
                 <div>
                     <h4 class="footer-heading">Legal</h4>
                     <ul class="footer-links">
@@ -1260,7 +1151,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
     <!-- MODALS -->
     <!-- ============================================================ -->
 
-    <!-- Withdraw Modal -->
     <div class="modal-overlay" id="withdraw-modal">
         <div class="modal">
             <div class="modal-header">
@@ -1290,7 +1180,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
         </div>
     </div>
 
-    <!-- Order Details Modal -->
     <div class="modal-overlay" id="order-modal">
         <div class="modal">
             <div class="modal-header">
@@ -1316,7 +1205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
     <script src="../assets/js/vendor-dashboard.js"></script>
 
     <!-- ============================================================ -->
-    <!-- ADDITIONAL SCRIPT -->
+    <!-- PASS PHP DATA TO JAVASCRIPT -->
     <!-- ============================================================ -->
     <script>
         // ── PASS PHP DATA TO JAVASCRIPT ─────────────────────────────────────
@@ -1324,226 +1213,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
         const phpOrders = <?= json_encode($recentOrders) ?>;
         const phpSales = [42, 68, 55, 90, 74, 115, 88];
         const isPendingApproval = <?= $pendingApproval ? 'true' : 'false' ?>;
-
-        // ── SAVE SETTINGS ──────────────────────────────────────────────────
-        function saveSettings() {
-            showToast('Settings saved successfully!', 'success');
-        }
-
-        // ── OVERRIDE RENDER FUNCTIONS WITH PHP DATA ──────────────────────
-        const originalRenderProducts = renderProducts;
-        renderProducts = function(list) {
-            const grid = document.getElementById('product-grid');
-            if (!grid) return;
-
-            const products = list || phpProducts;
-
-            if (!products || products.length === 0) {
-                grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
-                    <div class="icon">📦</div>
-                    <p>You haven't listed any products yet.</p>
-                    <button class="btn btn-primary" onclick="navigate('add-product', document.querySelector('[onclick*=\" add-product\"]'))">
-                        Add Your First Product
-                    </button>
-                </div>`;
-                return;
-            }
-
-            grid.innerHTML = products.map(p => `
-                <div class="product-card">
-                    <div class="product-thumb" style="background:${p.stock == 0 ? '#fdecea' : 'var(--warm-grey)'}">
-                        ${p.image_url ? `<img src="/Bona-Markets/Public/${p.image_url}" alt="${p.name}" />` : '<span class="no-image">🛍️</span>'}
-                        <span class="product-thumb-badge">
-                            ${p.stock == 0
-                                ? '<span class="badge badge-danger">Out of Stock</span>'
-                                : p.stock <= 3
-                                ? '<span class="badge badge-warning">Low Stock</span>'
-                                : '<span class="badge badge-success">Active</span>'}
-                        </span>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-name">${p.name}</div>
-                        <div class="product-meta">
-                            <span>${p.category_name || 'Uncategorized'}</span>·
-                            <span>${p.stock} in stock</span>
-                        </div>
-                        <div class="product-price">R ${Number(p.price).toLocaleString()}</div>
-                        <div class="product-actions">
-                            <button class="btn btn-outline btn-sm" onclick="showToast('Opening editor for ${p.name.replace(/'/g,'&#39;')}','warning')">Edit</button>
-                            <button class="btn-icon" onclick="showToast('${p.name.replace(/'/g,'&#39;')} duplicated','success')" title="Duplicate">
-                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                            </button>
-                            <button class="btn-icon" style="margin-left:auto" onclick="showToast('${p.name.replace(/'/g,'&#39;')} removed','warning')" title="Delete">
-                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        };
-
-        // Override renderOrders to use PHP data
-        const originalRenderOrders = renderOrders;
-        renderOrders = function() {
-            const tbody = document.getElementById('orders-tbody');
-            if (!tbody) return;
-
-            const orders = phpOrders;
-
-            if (!orders || orders.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:1rem;">No orders yet</td></tr>`;
-                return;
-            }
-
-            const statusMap = {
-                pending: '<span class="badge badge-warning"><span class="badge-dot"></span>Pending</span>',
-                shipped: '<span class="badge badge-neutral"><span class="badge-dot"></span>Shipped</span>',
-                delivered: '<span class="badge badge-success"><span class="badge-dot"></span>Delivered</span>',
-                cancelled: '<span class="badge badge-danger"><span class="badge-dot"></span>Cancelled</span>',
-            };
-
-            tbody.innerHTML = orders.map(o => `
-                <tr>
-                    <td><span class="order-id">#BM-${String(o.id).padStart(4, '0')}</span></td>
-                    <td>
-                        <div class="customer-cell">
-                            <div class="customer-avatar">${(o.customer_name || 'G').substring(0, 2).toUpperCase()}</div>
-                            ${o.customer_name || 'Guest'}
-                        </div>
-                    </td>
-                    <td>${o.products || '—'}</td>
-                    <td style="color:var(--muted);font-size:.84rem">${new Date(o.created_at).toLocaleDateString('en-ZA', {day:'2-digit', month:'short', year:'numeric'})}</td>
-                    <td><span class="amount-cell">R ${Number(o.total).toLocaleString()}</span></td>
-                    <td>${statusMap[o.status] || '<span class="badge badge-neutral">Unknown</span>'}</td>
-                    <td>
-                        <button class="btn btn-outline btn-sm" onclick="openOrderModal('${o.id}')">View</button>
-                    </td>
-                </tr>
-            `).join('');
-        };
-
-        // ── OVERRIDE FILTER PRODUCTS ──────────────────────────────────────
-        const originalFilterProducts = filterProducts;
-        filterProducts = function(q = '') {
-            const searchInput = document.querySelector('.search-input');
-            const query = q || (searchInput ? searchInput.value : '');
-
-            const filtered = query ?
-                phpProducts.filter(p => p.name.toLowerCase().includes(query.toLowerCase()) || (p.category_name && p.category_name.toLowerCase().includes(query.toLowerCase()))) :
-                phpProducts;
-
-            renderProducts(filtered);
-        };
-
-        // ─── ADD PRODUCT FORM FUNCTIONS ────────────────────────────────────
         
-        // Image upload handling
-        const uploadZone = document.getElementById('uploadZone');
-        const imageInput = document.getElementById('imageInput');
-        const imagePreview = document.getElementById('imagePreview');
-        const previewImg = document.getElementById('previewImg');
-
-        if (uploadZone) {
-            uploadZone.addEventListener('click', function() {
-                imageInput.click();
-            });
-        }
-
-        if (imageInput) {
-            imageInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    handleFile(file);
-                }
-            });
-        }
-
-        // Drag and drop
-        if (uploadZone) {
-            uploadZone.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                this.classList.add('dragover');
-            });
-
-            uploadZone.addEventListener('dragleave', function(e) {
-                e.preventDefault();
-                this.classList.remove('dragover');
-            });
-
-            uploadZone.addEventListener('drop', function(e) {
-                e.preventDefault();
-                this.classList.remove('dragover');
-                
-                const file = e.dataTransfer.files[0];
-                if (file) {
-                    const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(file);
-                    imageInput.files = dataTransfer.files;
-                    handleFile(file);
-                }
-            });
-        }
-
-        function handleFile(file) {
-            const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-            if (!validTypes.includes(file.type)) {
-                showToast('Invalid file type. Please upload JPEG, PNG, GIF, or WEBP images only.', 'warning');
-                imageInput.value = '';
-                return;
-            }
-
-            if (file.size > 10 * 1024 * 1024) {
-                showToast('File is too large. Maximum size is 10MB.', 'warning');
-                imageInput.value = '';
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                previewImg.src = event.target.result;
-                imagePreview.style.display = 'block';
-                uploadZone.style.display = 'none';
-                showToast('Image uploaded successfully!', 'success');
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function removeImage() {
-            imageInput.value = '';
-            imagePreview.style.display = 'none';
-            uploadZone.style.display = 'block';
-            previewImg.src = '#';
-            showToast('Image removed', 'warning');
-        }
-
-        function saveDraft() {
-            const statusSelect = document.querySelector('select[name="status"]');
-            if (statusSelect) {
-                statusSelect.value = 'draft';
-            }
-            document.getElementById('addProductForm').submit();
-        }
-
-        // ── INIT ──────────────────────────────────────────────────────────
-        document.addEventListener('DOMContentLoaded', function() {
-            renderProducts(phpProducts);
-            renderOrders();
-
-            const chart = document.getElementById('sales-chart');
-            if (chart) {
-                const max = Math.max(...phpSales);
-                chart.innerHTML = phpSales.map((v, i) => `
-                    <div class="bar ${i === 5 ? 'highlight' : ''}" style="height:${Math.round((v/max)*100)}%" title="R ${v*100}"></div>
-                `).join('');
-            }
-
-            console.log('Bona Markets Vendor Dashboard loaded with PHP data!');
-            console.log('Products:', phpProducts.length);
-            console.log('Orders:', phpOrders.length);
-            console.log('Pending Approval:', isPendingApproval);
-        });
+        console.log('PHP Data loaded:');
+        console.log('Products:', phpProducts.length);
+        console.log('Orders:', phpOrders.length);
+        console.log('Pending Approval:', isPendingApproval);
     </script>
 
 </body>
-
 </html>
