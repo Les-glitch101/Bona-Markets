@@ -26,6 +26,17 @@ CREATE TABLE categories (
     name VARCHAR(100) NOT NULL UNIQUE
 );
 
+INSERT INTO categories (id, name) VALUES
+(1, 'Electronics'),
+(2, 'Clothing'),
+(3, 'Home & Garden'),
+(4, 'Accessories'),
+(5, 'Beauty & Wellness'),
+(6, 'Handcrafts'),
+(7, 'Food & Spices'),
+(8, 'Art & Decor'),
+(9, 'Jewellery');
+
 CREATE TABLE vendor_profiles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL UNIQUE,
