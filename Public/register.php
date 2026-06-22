@@ -1,14 +1,76 @@
 <?php
-// Start session for future PHP integration (Week 2)
+// ============================================================
+// REGISTER PAGE – With Vendor Redirect
+// ============================================================
+
 session_start();
 
-// Week 1: This is a static demo page
-// Week 2: This will connect to database and real registration
-
-// If user is already logged in (Week 2+), redirect to homepage
+// Redirect if already logged in
 if (isset($_SESSION['user_id'])) {
     header('Location: index.php');
     exit;
+}
+
+// Include database connection
+require_once '../config/database.php';
+
+$error = '';
+$success = '';
+$redirectTo = 'login.php'; // Default redirect
+
+// Handle registration form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $fullname = trim($_POST['fullname'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+    $confirmPassword = trim($_POST['confirmPassword'] ?? '');
+    $role = $_POST['role'] ?? 'buyer';
+    $terms = isset($_POST['terms']) ? true : false;
+    
+    // Validate
+    if (empty($fullname) || empty($email) || empty($password)) {
+        $error = 'Please fill in all required fields.';
+    } elseif (strlen($fullname) < 2) {
+        $error = 'Please enter your full name.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = 'Please enter a valid email address.';
+    } elseif (strlen($password) < 6) {
+        $error = 'Password must be at least 6 characters.';
+    } elseif ($password !== $confirmPassword) {
+        $error = 'Passwords do not match.';
+    } elseif (!$terms) {
+        $error = 'You must agree to the Terms of Service.';
+    } else {
+        // Check if email already exists
+        $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        if ($stmt->fetch()) {
+            $error = 'Email already registered. Please login.';
+        } else {
+            // For demo: storing plain text (replace with password_hash in production!)
+            $hashedPassword = $password;
+            
+            // Insert new user
+            $stmt = $pdo->prepare("INSERT INTO users (email, passwordHash, role, fullname) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$email, $hashedPassword, $role, $fullname]);
+            
+            // Set session so user is logged in immediately
+            $_SESSION['user_id'] = $pdo->lastInsertId();
+            $_SESSION['email'] = $email;
+            $_SESSION['fullname'] = $fullname;
+            $_SESSION['role'] = $role;
+            
+            // If user registered as vendor, redirect to apply page
+            if ($role === 'vendor') {
+                $redirectTo = 'apply.php';
+            } else {
+                $redirectTo = 'index.php?login=success';
+            }
+            
+            $success = 'Account created successfully! Redirecting...';
+            header('refresh:2;url=' . $redirectTo);
+        }
+    }
 }
 ?>
 
@@ -18,21 +80,14 @@ if (isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Sign Up | Bona Markets</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Custom font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        }
-        input, select {
-            transition: all 0.2s ease;
-        }
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        input, select { transition: all 0.2s ease; }
     </style>
 </head>
 <body class="bg-gray-50">
-
 
     <!-- ========== MAIN CONTENT ========== -->
     <main class="min-h-screen flex items-center justify-center py-12 px-4">
@@ -57,18 +112,32 @@ if (isset($_SESSION['user_id'])) {
                 <!-- Demo Alert -->
                 <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6">
                     <p class="text-blue-700 text-xs text-center">
-                        📝 <span class="font-medium">Demo Mode:</span> Fill any details to simulate registration
-                        <br>(Real registration coming in Week 2)
+                        📝 <span class="font-medium">MySQL Database:</span> Create a real account with your details
+                        <br>Password must be at least 6 characters
                     </p>
                 </div>
                 
+                <!-- Display PHP Error Message -->
+                <?php if ($error): ?>
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                        <p class="text-red-600 text-sm text-center"><?= htmlspecialchars($error) ?></p>
+                    </div>
+                <?php endif; ?>
+                
+                <!-- Display PHP Success Message -->
+                <?php if ($success): ?>
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                        <p class="text-green-600 text-sm text-center"><?= htmlspecialchars($success) ?></p>
+                    </div>
+                <?php endif; ?>
+                
                 <!-- Registration Form -->
-                <form id="registerForm" onsubmit="handleRegister(event)">
+                <form method="POST" action="">
                     
                     <!-- Full Name Field -->
                     <div class="mb-4">
                         <label for="fullname" class="block text-gray-700 font-medium mb-2">
-                            Full Name
+                            Full Name <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -79,7 +148,7 @@ if (isset($_SESSION['user_id'])) {
                             <input type="text" id="fullname" name="fullname" 
                                    class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                    placeholder="John Doe"
-                                   value="Demo User"
+                                   value="<?= htmlspecialchars($_POST['fullname'] ?? '') ?>"
                                    required>
                         </div>
                     </div>
@@ -87,7 +156,7 @@ if (isset($_SESSION['user_id'])) {
                     <!-- Email Field -->
                     <div class="mb-4">
                         <label for="email" class="block text-gray-700 font-medium mb-2">
-                            Email Address
+                            Email Address <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -98,7 +167,7 @@ if (isset($_SESSION['user_id'])) {
                             <input type="email" id="email" name="email" 
                                    class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                    placeholder="you@example.com"
-                                   value="demo@bonamarkets.com"
+                                   value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
                                    required>
                         </div>
                     </div>
@@ -106,7 +175,7 @@ if (isset($_SESSION['user_id'])) {
                     <!-- Role Selection -->
                     <div class="mb-4">
                         <label for="role" class="block text-gray-700 font-medium mb-2">
-                            I want to...
+                            I want to... <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -116,8 +185,8 @@ if (isset($_SESSION['user_id'])) {
                             </div>
                             <select id="role" name="role" 
                                     class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white appearance-none">
-                                <option value="buyer">Shop as a Buyer</option>
-                                <option value="vendor">Sell as a Vendor</option>
+                                <option value="buyer" <?= ($_POST['role'] ?? '') === 'buyer' ? 'selected' : '' ?>>Shop as a Buyer</option>
+                                <option value="vendor" <?= ($_POST['role'] ?? '') === 'vendor' ? 'selected' : '' ?>>Sell as a Vendor</option>
                             </select>
                             <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                 <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,7 +202,7 @@ if (isset($_SESSION['user_id'])) {
                     <!-- Password Field -->
                     <div class="mb-4">
                         <label for="password" class="block text-gray-700 font-medium mb-2">
-                            Password
+                            Password <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -143,8 +212,7 @@ if (isset($_SESSION['user_id'])) {
                             </div>
                             <input type="password" id="password" name="password" 
                                    class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                   placeholder="Create a password"
-                                   value="demo123"
+                                   placeholder="Create a password (min 6 chars)"
                                    required>
                             <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-3 flex items-center">
                                 <svg class="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -153,12 +221,13 @@ if (isset($_SESSION['user_id'])) {
                                 </svg>
                             </button>
                         </div>
+                        <p class="text-xs text-gray-500 mt-1">Minimum 6 characters</p>
                     </div>
                     
                     <!-- Confirm Password Field -->
                     <div class="mb-5">
                         <label for="confirmPassword" class="block text-gray-700 font-medium mb-2">
-                            Confirm Password
+                            Confirm Password <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -169,7 +238,6 @@ if (isset($_SESSION['user_id'])) {
                             <input type="password" id="confirmPassword" name="confirmPassword" 
                                    class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                    placeholder="Confirm your password"
-                                   value="demo123"
                                    required>
                             <button type="button" id="toggleConfirmPassword" class="absolute inset-y-0 right-0 pr-3 flex items-center">
                                 <svg class="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -182,23 +250,13 @@ if (isset($_SESSION['user_id'])) {
                     
                     <!-- Terms Checkbox -->
                     <div class="flex items-start mb-6">
-                        <input type="checkbox" id="terms" class="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 mt-0.5">
+                        <input type="checkbox" id="terms" name="terms" value="1" class="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 mt-0.5">
                         <label for="terms" class="ml-2 text-sm text-gray-600">
                             I agree to the 
                             <a href="#" class="text-blue-600 hover:underline">Terms of Service</a> 
                             and 
                             <a href="#" class="text-blue-600 hover:underline">Privacy Policy</a>
                         </label>
-                    </div>
-                    
-                    <!-- Error Message -->
-                    <div id="errorMessage" class="hidden bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-                        <p class="text-red-600 text-sm text-center" id="errorText"></p>
-                    </div>
-                    
-                    <!-- Success Message -->
-                    <div id="successMessage" class="hidden bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
-                        <p class="text-green-600 text-sm text-center" id="successText">Account created! Redirecting to login...</p>
                     </div>
                     
                     <!-- Register Button -->
@@ -245,21 +303,9 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </main>
 
-
-
     <!-- ========== JAVASCRIPT ========== -->
     <script>
-        // ===== Mobile Menu Toggle =====
-        const menuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        if (menuBtn && mobileMenu) {
-            menuBtn.addEventListener('click', function() {
-                mobileMenu.classList.toggle('hidden');
-            });
-        }
-
-        // ===== Toggle Password Visibility (Password field) =====
+        // Toggle Password Visibility (Password field)
         const togglePassword = document.getElementById('togglePassword');
         const passwordInput = document.getElementById('password');
 
@@ -281,7 +327,7 @@ if (isset($_SESSION['user_id'])) {
             });
         }
 
-        // ===== Toggle Password Visibility (Confirm Password field) =====
+        // Toggle Password Visibility (Confirm Password field)
         const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
         const confirmPasswordInput = document.getElementById('confirmPassword');
 
@@ -302,74 +348,6 @@ if (isset($_SESSION['user_id'])) {
                 }
             });
         }
-
-        // ===== Handle Registration Form Submission =====
-        function handleRegister(event) {
-            event.preventDefault();
-            
-            const fullname = document.getElementById('fullname').value;
-            const email = document.getElementById('email').value;
-            const role = document.getElementById('role').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const terms = document.getElementById('terms').checked;
-            
-            const errorDiv = document.getElementById('errorMessage');
-            const errorText = document.getElementById('errorText');
-            const successDiv = document.getElementById('successMessage');
-            
-            // Hide previous messages
-            errorDiv.classList.add('hidden');
-            successDiv.classList.add('hidden');
-            
-            // Validation: Full name
-            if (!fullname || fullname.trim().length < 2) {
-                errorText.innerText = 'Please enter your full name';
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-            
-            // Validation: Email
-            if (!email || !email.includes('@')) {
-                errorText.innerText = 'Please enter a valid email address';
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-            
-            // Validation: Password
-            if (!password || password.length < 6) {
-                errorText.innerText = 'Password must be at least 6 characters';
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-            
-            // Validation: Password match
-            if (password !== confirmPassword) {
-                errorText.innerText = 'Passwords do not match';
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-            
-            // Validation: Terms
-            if (!terms) {
-                errorText.innerText = 'You must agree to the Terms of Service';
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-            
-            // Week 1: Demo mode – simulate successful registration
-            console.log('Demo registration:', { fullname, email, role, password });
-            
-            // Show success message
-            successDiv.classList.remove('hidden');
-            
-            // Redirect to login.php after 1.5 seconds
-            setTimeout(function() {
-                window.location.href = 'login.php';
-            }, 1500);
-        }
-        
-        console.log('Registration page loaded – redirects to login.php');
     </script>
 </body>
 </html>
