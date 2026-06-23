@@ -29,7 +29,7 @@ At the top, there should be a list of buttons/tabs. Click on the one that says i
 
 As long as you ensured the entire file and all the code from the repository is inside the htdocs file, you can actually open up the website on your laptop.
 
-It should be something like this, typed into your browser: localhost/bona-markets/public -> and then the html/css, or whateer was on the respository at that time, will be there.
+It should be something like this, typed into your browser and then the html/css, or whateer was on the respository at that time, will be there: localhost/bona-markets/public 
 
 
 ## If you have any trouble with any of this, please let me know and we can have a teams meeting and I can show you how to fix any errors, or how to set it up.
