@@ -209,10 +209,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
         }
     }
 }
-}
-    }
-}
-
 // ─── HANDLE EDIT PRODUCT ────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_product'])) {
     $product_id = intval($_POST['product_id']);
@@ -703,23 +699,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product'])) {
                                         <span><?= $product['stock'] ?> in stock</span>
                                     </div>
                                     <div class="product-price">R <?= number_format($product['price'], 2) ?></div>
-                                    <div class="product-actions">
-                                        <button class="btn btn-outline btn-sm" onclick="showToast('Edit <?= htmlspecialchars($product['name']) ?> coming soon','warning')">Edit</button>
-                                        <button class="btn-icon" onclick="showToast('<?= htmlspecialchars($product['name']) ?> duplicated','success')" title="Duplicate">
-                                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                <rect x="9" y="9" width="13" height="13" rx="2" />
-                                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                                            </svg>
-                                        </button>
-                                        <button class="btn-icon" style="margin-left:auto" onclick="showToast('<?= htmlspecialchars($product['name']) ?> removed','warning')" title="Delete">
-                                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                <polyline points="3 6 5 6 21 6" />
-                                                <path d="M19 6l-1 14H6L5 6" />
-                                                <path d="M10 11v6M14 11v6" />
-                                                <path d="M9 6V4h6v2" />
-                                            </svg>
-                                        </button>
-                                    </div>
+                                   <div class="product-actions">
+    <button class="btn btn-outline btn-sm" onclick="openEditModal(<?= htmlspecialchars(json_encode($product)) ?>)">Edit</button>
+    <form method="POST" action="" style="margin-left:auto" onsubmit="return confirm('Delete <?= htmlspecialchars($product['name']) ?>? This cannot be undone.')">
+        <input type="hidden" name="delete_product" value="1" />
+        <input type="hidden" name="product_id" value="<?= $product['id'] ?>" />
+        <button type="submit" class="btn-icon" title="Delete">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6l-1 14H6L5 6" />
+                <path d="M10 11v6M14 11v6" />
+                <path d="M9 6V4h6v2" />
+            </svg>
+        </button>
+    </form>
+</div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
