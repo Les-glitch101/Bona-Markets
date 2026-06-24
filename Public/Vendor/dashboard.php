@@ -209,6 +209,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
         }
     }
 }
+}
+    }
+}
+
+// ─── HANDLE EDIT PRODUCT ────────────────────────────────────────
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_product'])) {
+    $product_id = intval($_POST['product_id']);
+    $data = [
+        'name'        => trim($_POST['name'] ?? ''),
+        'description' => trim($_POST['description'] ?? ''),
+        'price'       => floatval($_POST['price'] ?? 0),
+        'category_id' => !empty($_POST['category_id']) ? intval($_POST['category_id']) : null,
+        'stock'       => intval($_POST['stock'] ?? 0),
+        'status'      => $_POST['status'] ?? 'active',
+    ];
+
+    // Handle image upload if a new one was provided
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        $fileType = mime_content_type($_FILES['image']['tmp_name']);
+        if (in_array($fileType, $allowedTypes) && $_FILES['image']['size'] <= 10 * 1024 * 1024) {
+            $uploadDir = __DIR__ . '/../uploads/products/';
+            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+            $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+            $fileName = uniqid() . '.' . $ext;
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadDir . $fileName)) {
+                $data['image_url'] = 'uploads/products/' . $fileName;
+            }
+        }
+    }
+
+    $stmt = $pdo->prepare("
+        UPDATE products 
+        SET name=?, description=?, price=?, category_id=?, stock=?, status=?
+        " . (!empty($data['image_url']) ? ", image_url=?" : "") . "
+        WHERE id=? AND vendor_id=?
+    ");
+
+    $params = [$data['name'], $data['description'], $data['price'], $data['category_id'], $data['stock'], $data['status']];
+    if (!empty($data['image_url'])) $params[] = $data['image_url'];
+    $params[] = $product_id;
+    $params[] = $user_id;
+
+    $stmt->execute($params);
+    $editSuccess = 'Product updated successfully!';
+
+    // Refresh product list
+    $stmt = $pdo->prepare("SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.vendor_id = ? ORDER BY p.created_at DESC");
+    $stmt->execute([$user_id]);
+    $products = $stmt->fetchAll();
+}
+
+// ─── HANDLE DELETE PRODUCT ──────────────────────────────────────
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product'])) {
+    $product_id = intval($_POST['product_id']);
+
+    // Verify ownership first
+    $check = $pdo->prepare("SELECT id FROM products WHERE id = ? AND vendor_id = ?");
+    $check->execute([$product_id, $user_id]);
+
+    if ($check->fetch()) {
+        // Clear from carts first
+        $pdo->prepare("DELETE FROM cart WHERE product_id = ?")->execute([$product_id]);
+        // Delete product
+        $pdo->prepare("DELETE FROM products WHERE id = ? AND vendor_id = ?")->execute([$product_id, $user_id]);
+        $deleteSuccess = 'Product deleted.';
+
+        // Refresh product list
+        $stmt = $pdo->prepare("SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.vendor_id = ? ORDER BY p.created_at DESC");
+        $stmt->execute([$user_id]);
+        $products = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
