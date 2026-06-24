@@ -254,8 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_product'])) {
     // Refresh product list
     $stmt = $pdo->prepare("SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.vendor_id = ? ORDER BY p.created_at DESC");
     $stmt->execute([$user_id]);
-    $products = $stmt->fetchAll();
-}
+   
 
 // ─── HANDLE DELETE PRODUCT ──────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product'])) {
@@ -275,7 +274,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product'])) {
         // Refresh product list
         $stmt = $pdo->prepare("SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.vendor_id = ? ORDER BY p.created_at DESC");
         $stmt->execute([$user_id]);
-        $products = $stmt->fetchAll();
+        $productCount = count($products);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
