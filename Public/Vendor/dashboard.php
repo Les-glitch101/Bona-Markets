@@ -1259,6 +1259,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product'])) {
             </div>
         </div>
     </div>
+    <!-- EDIT PRODUCT MODAL -->
+<div class="modal-overlay" id="edit-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Edit Product</h3>
+            <button class="modal-close" onclick="closeEditModal()">✕</button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="" enctype="multipart/form-data" id="editProductForm">
+                <input type="hidden" name="edit_product" value="1" />
+                <input type="hidden" name="product_id" id="edit-product-id" />
+
+                <div class="form-group" style="margin-bottom:1rem">
+                    <label>Product Name</label>
+                    <input type="text" name="name" id="edit-name" required />
+                </div>
+
+                <div class="form-group" style="margin-bottom:1rem">
+                    <label>Description</label>
+                    <textarea name="description" id="edit-description" rows="3"></textarea>
+                </div>
+
+                <div class="form-group" style="margin-bottom:1rem">
+                    <label>Category</label>
+                    <select name="category_id" id="edit-category" class="form-select">
+                        <option value="">Select category</option>
+                        <?php foreach ($categories as $cat): ?>
+                            <option value="<?= $cat['id'] ?>"><?= htmlspecialchars($cat['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+                    <div class="form-group">
+                        <label>Price (ZAR)</label>
+                        <input type="number" name="price" id="edit-price" step="0.01" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Stock</label>
+                        <input type="number" name="stock" id="edit-stock" required />
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom:1rem">
+                    <label>Status</label>
+                    <select name="status" id="edit-status" class="form-select">
+                        <option value="active">Active</option>
+                        <option value="draft">Draft</option>
+                        <option value="archived">Archived</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom:1rem">
+                    <label>Replace Image (optional)</label>
+                    <input type="file" name="image" accept="image/*" />
+                </div>
+
+                <div class="modal-footer" style="padding:0;margin-top:1rem">
+                    <button type="button" class="btn btn-outline" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
     <!-- ============================================================ -->
     <!-- TOAST CONTAINER -->
@@ -1284,6 +1349,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product'])) {
         console.log('Products:', phpProducts.length);
         console.log('Orders:', phpOrders.length);
         console.log('Pending Approval:', isPendingApproval);
+
+        function openEditModal(product) {
+    document.getElementById('edit-product-id').value = product.id;
+    document.getElementById('edit-name').value = product.name;
+    document.getElementById('edit-description').value = product.description || '';
+    document.getElementById('edit-price').value = product.price;
+    document.getElementById('edit-stock').value = product.stock;
+    document.getElementById('edit-status').value = product.status;
+
+    // Set the category dropdown
+    var categorySelect = document.getElementById('edit-category');
+    for (var i = 0; i < categorySelect.options.length; i++) {
+        if (categorySelect.options[i].value == product.category_id) {
+            categorySelect.selectedIndex = i;
+            break;
+        }
+    }
+
+    document.getElementById('edit-modal').style.display = 'flex';
+}
+
+function closeEditModal() {
+    document.getElementById('edit-modal').style.display = 'none';
+}
+
+// Close modal if user clicks outside it
+document.getElementById('edit-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeEditModal();
+});
     </script>
 
 </body>
