@@ -219,7 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_product'])) {
         'category_id' => !empty($_POST['category_id']) ? intval($_POST['category_id']) : null,
         'stock'       => intval($_POST['stock'] ?? 0),
         'status'      => $_POST['status'] ?? 'active',
-    ];
+    ]};
 
     // Handle image upload if a new one was provided
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
