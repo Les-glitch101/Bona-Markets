@@ -3,7 +3,7 @@
 -- So for example, on the vendor apply form, if a logo is needed, the upload part must be coded there. Same for the marketplace/products created by the vendors.
 -- So if you need an image to be uploaded by a user, you will have to code it in your php code, and make sure you connect it via POST to the database.php file. 
 
-CREATE DATABASE IF NOT EXISTS bonamarkets;CREATE DATABASE IF NOT EXISTS;
+
 DROP TABLE IF EXISTS order_items;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS cart;
