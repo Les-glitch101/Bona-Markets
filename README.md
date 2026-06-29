@@ -28,272 +28,393 @@
 
 ---
 
-# Bona Markets – Week 3 Checklist
+# Bona Markets – Week 4 Plan
 
-**Week 3 Focus:** Product Management + Buyer Marketplace
-
-**Dates:** [2026/06/22] to [2026/06/26]
-
-**Status:** ⬜ In Progress | ✅ Complete | ❌ Blocked
-
----
-
-# Project Manager / Frontend UI
-
-| Task                                               | Status | Notes |
-| -------------------------------------------------- | ------ | ----- |
-| Run daily standups at [time]                       | ⬜      |       |
-| Update project board with Week 3 tasks             | ⬜      |       |
-| Review and merge pull requests                     | ⬜      |       |
-| Coordinate between Product and Catalogue teams     | ⬜      |       |
-| Ensure all product pages are mobile responsive     | ⬜      |       |
-| Update README with product management instructions | ⬜      |       |
+**Week:** 4  
+**Focus:** Shopping Cart + Checkout + Admin Dashboard  
+**Start Date:** [29/06/2026]  
+**End Date:** [03/07/2026]
 
 ---
 
-# Database & Backend Foundation
+# Week 3 Completion Check
 
-| Task                                          | Status | Notes |
-| --------------------------------------------- | ------ | ----- |
-| Ensure products table has image_url column    | ⬜      |       |
-| Create categories table if not exists         | ⬜      |       |
-| Seed categories (Electronics, Clothing, etc.) | ⬜      |       |
-| Test product queries with sample data         | ⬜      |       |
-| Help Product team with database queries       | ⬜      |       |
+Before starting Week 4, confirm these were delivered:
 
----
-
-# Authentication & Authorization
-
-| Task                                                    | Status | Notes |
-| ------------------------------------------------------- | ------ | ----- |
-| Add role checks to product pages (vendor only for CRUD) | ⬜      |       |
-| Test that non-vendors cannot access product creation    | ⬜      |       |
-| Ensure session persists across all pages                | ⬜      |       |
-| Fix any session-related bugs                            | ⬜      |       |
-
-## Route Protection
-
-| Page                       | Who Can Access          | Status |
-| -------------------------- | ----------------------- | ------ |
-| vendor/products/create.php | Vendor only             | ⬜      |
-| vendor/products/edit.php   | Vendor only (their own) | ⬜      |
-| vendor/products/delete.php | Vendor only (their own) | ⬜      |
-| products/index.php         | Anyone (public)         | ⬜      |
-| products/show.php          | Anyone (public)         | ⬜      |
+| Person | Week 3 Deliverable | Status |
+|----------|----------|----------|
+| Person 5 (Amogelang) | Product CRUD (Create, Read, Update, Delete) working | ☐ |
+| Person 6 (Bianca) | Public catalogue with search/filter/sort | ☐ |
+| Person 10 (Lesiamo) | Product pages styled and responsive | ☐ |
+| Person 9 (Dan) | Product CRUD tests executed | ☐ |
 
 ---
 
-# Vendor Module
+# Week 4 Focus
 
-| Task                                                        | Status | Notes |
-| ----------------------------------------------------------- | ------ | ----- |
-| Ensure vendor dashboard shows real product stats            | ⬜      |       |
-| Link Add Product button to vendor/products/create.php       | ⬜      |       |
-| Fix vendor dashboard product count                          | ⬜      |       |
-| Test vendor flow: register → apply → approve → add products | ⬜      |       |
-| Help Product team with vendor-side product listing          | ⬜      |       |
+Shopping Cart + Checkout + Admin Dashboard
 
----
+This week is about:
 
-# Product Management ⭐ MAIN FOCUS
-
-| Task                                                             | Status | Notes |
-| ---------------------------------------------------------------- | ------ | ----- |
-| Build vendor/products/create.php (Add Product with image upload) | ⬜      |       |
-| Build vendor/products/index.php (List vendor products)           | ⬜      |       |
-| Build vendor/products/edit.php (Edit product)                    | ⬜      |       |
-| Build vendor/products/delete.php (Delete product)                | ⬜      |       |
-| Add validation for product form (name, price, stock)             | ⬜      |       |
-| Integrate image upload with server storage                       | ⬜      |       |
-| Test CRUD operations                                             | ⬜      |       |
-
-## Product CRUD Pages
-
-| Page                       | Purpose                            | Status |
-| -------------------------- | ---------------------------------- | ------ |
-| vendor/products/create.php | Add new product with image upload  | ⬜      |
-| vendor/products/index.php  | List all vendor products           | ⬜      |
-| vendor/products/edit.php   | Edit existing product              | ⬜      |
-| vendor/products/delete.php | Delete product (with confirmation) | ⬜      |
-
-## Product Fields Checklist
-
-| Field       | Type                             | Required | Status |
-| ----------- | -------------------------------- | -------- | ------ |
-| Name        | Text                             | Yes      | ⬜      |
-| Description | Textarea                         | No       | ⬜      |
-| Category    | Dropdown                         | No       | ⬜      |
-| Price       | Number                           | Yes      | ⬜      |
-| Stock       | Number                           | Yes      | ⬜      |
-| Image       | File Upload                      | No       | ⬜      |
-| Status      | Dropdown (active/draft/archived) | Yes      | ⬜      |
+- Buyers can add products to cart, update quantities, and checkout
+- Admins can approve vendors and manage the platform
+- Vendors see orders for their products
 
 ---
 
-# Buyer Marketplace ⭐ MAIN FOCUS
+# Person-by-Person Week 4 Tasks
 
-| Task                                                          | Status | Notes |
-| ------------------------------------------------------------- | ------ | ----- |
-| Build products/index.php (Public catalogue with product grid) | ⬜      |       |
-| Build products/show.php (Product details page)                | ⬜      |       |
-| Add search functionality (by product name)                    | ⬜      |       |
-| Add category filter (dropdown)                                | ⬜      |       |
-| Add sort options (price, newest)                              | ⬜      |       |
-| Make product grid responsive (1→2→3→4 columns)                | ⬜      |       |
-| Test catalogue with sample products                           | ⬜      |       |
+## Person 1 – Lesiamo (Project Manager / Frontend UI)
 
-## Catalogue Features
-
-| Feature                                   | Status | Notes |
-| ----------------------------------------- | ------ | ----- |
-| Product grid (with images, names, prices) | ⬜      |       |
-| Search bar (search by name)               | ⬜      |       |
-| Category filter                           | ⬜      |       |
-| Sort by price (low-high, high-low)        | ⬜      |       |
-| Sort by newest                            | ⬜      |       |
-| Product details page                      | ⬜      |       |
+| Task | Deadline |
+|----------|----------|
+| Run daily standups at [time] | Daily |
+| Update project board with Week 4 tasks | Monday |
+| Review and merge pull requests | As needed |
+| Coordinate between Person 7 (Cart) and Person 8 (Admin) | Ongoing |
+| Ensure cart and admin pages are mobile responsive | Friday |
+| Update README with cart and admin instructions | Friday |
 
 ---
 
-# Shopping Cart (Prep for Week 4)
+## Person 2 – Gabrielle (Database & Backend Foundation)
 
-| Task                                                    | Status | Notes |
-| ------------------------------------------------------- | ------ | ----- |
-| Confirm cart placeholders exist                         | ⬜      |       |
-| Research Stripe test mode setup                         | ⬜      |       |
-| Document cart data structure (session vs database)      | ⬜      |       |
-| Start building cart UI (static HTML)                    | ⬜      |       |
-| Coordinate with Buyer Marketplace on Add to Cart button | ⬜      |       |
+| Task | Deadline |
+|----------|----------|
+| Ensure cart table exists with correct columns | Monday |
+| Ensure orders and order_items tables exist | Monday |
+| Add stripe_session_id to orders table | Monday |
+| Help Person 7 with database queries for cart/checkout | As needed |
+| Help Person 8 with admin dashboard queries | As needed |
 
----
+### SQL To Run (If Not Already Done)
 
-# Admin Dashboard (Prep for Week 4)
+```sql
+-- Ensure cart table exists
+CREATE TABLE IF NOT EXISTS cart (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT DEFAULT 1,
+    added_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
 
-| Task                                                        | Status | Notes |
-| ----------------------------------------------------------- | ------ | ----- |
-| Confirm admin placeholders exist                            | ⬜      |       |
-| Plan vendor approval interface                              | ⬜      |       |
-| Define dashboard stats (vendors, products, orders, revenue) | ⬜      |       |
-| Start building admin UI                                     | ⬜      |       |
+-- Ensure orders table has stripe_session_id
+ALTER TABLE orders
+ADD COLUMN IF NOT EXISTS stripe_session_id VARCHAR(255) NULL;
 
-## Admin Pages to Build (Week 4)
-
-| Page                | Purpose                | Status |
-| ------------------- | ---------------------- | ------ |
-| admin/dashboard.php | Platform statistics    | ⬜      |
-| admin/vendors.php   | Approve/reject vendors | ⬜      |
-| admin/products.php  | View all products      | ⬜      |
-| admin/orders.php    | View all orders        | ⬜      |
-
----
-
-# Testing & QA
-
-| Task                                            | Status | Notes |
-| ----------------------------------------------- | ------ | ----- |
-| Create Week 3 test cases (products + catalogue) | ⬜      |       |
-| Execute product CRUD tests                      | ⬜      |       |
-| Execute catalogue tests (search, filter, sort)  | ⬜      |       |
-| Execute responsive design tests                 | ⬜      |       |
-| Log bugs in GitHub Issues                       | ⬜      |       |
-| Submit weekly test report (Friday)              | ⬜      |       |
-
-## Test Cases to Run
-
-| ID          | Description                          | Priority | Status |
-| ----------- | ------------------------------------ | -------- | ------ |
-| TC-PROD-001 | Add product with valid data          | High     | ⬜      |
-| TC-PROD-002 | Add product without name             | High     | ⬜      |
-| TC-PROD-003 | Add product with invalid price       | High     | ⬜      |
-| TC-PROD-004 | Add product with image upload        | High     | ⬜      |
-| TC-PROD-005 | Edit product                         | High     | ⬜      |
-| TC-PROD-006 | Delete product                       | High     | ⬜      |
-| TC-PROD-007 | Vendor sees only their products      | High     | ⬜      |
-| TC-CAT-001  | Product catalogue displays correctly | High     | ⬜      |
-| TC-CAT-002  | Search by product name               | Medium   | ⬜      |
-| TC-CAT-003  | Filter by category                   | Medium   | ⬜      |
-| TC-CAT-004  | Sort by price                        | Medium   | ⬜      |
-| TC-CAT-005  | Product details page                 | High     | ⬜      |
-| TC-CAT-006  | Mobile responsiveness                | Medium   | ⬜      |
+-- Ensure order_items table exists
+CREATE TABLE IF NOT EXISTS order_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+```
 
 ---
 
-# Documentation & Demo Video Support
+## Person 3 – Timothy (Authentication & Authorization)
 
-| Task                                               | Status | Notes |
-| -------------------------------------------------- | ------ | ----- |
-| Create docs/week3-tasks.md (this file)             | ⬜      |       |
-| Document product management flow                   | ⬜      |       |
-| Document buyer catalogue flow                      | ⬜      |       |
-| Update setup guide with product image instructions | ⬜      |       |
-| Collect UI screenshots for final report            | ⬜      |       |
+| Task | Deadline |
+|----------|----------|
+| Ensure session persists across cart/checkout pages | Monday |
+| Add role checks to admin pages (admin only) | Tuesday |
+| Test that non-admin users cannot access admin panel | Wednesday |
+| Add guest cart handling (optional) | Thursday |
+| Fix any session-related bugs | Ongoing |
 
----
+### Route Protection To Add
 
-# Week 3 Dependencies
-
-| Task               | Depends On                | Owner     | Status |
-| ------------------ | ------------------------- | --------- | ------ |
-| Product CRUD       | Database ready (Person 2) | Person 5  | ⬜      |
-| Product Images     | Upload folder created     | Person 5  | ⬜      |
-| Catalogue Page     | Products in database      | Person 6  | ⬜      |
-| Product UI Styling | Person 5 + Person 6       | Person 10 | ⬜      |
-| Testing            | Person 5 + Person 6       | Person 9  | ⬜      |
+| Page | Who Can Access |
+|----------|----------|
+| admin/* | Admin only |
+| cart/* | Logged-in users only |
+| orders/* | Logged-in users only |
+| checkout/* | Logged-in users only |
 
 ---
 
-# Week 3 Success Criteria
+## Person 4 – Karabelo (Vendor Module)
 
-By the end of Week 3:
+| Task | Deadline |
+|----------|----------|
+| Ensure vendor dashboard shows order stats correctly | Monday |
+| Link Orders tab to vendor product orders | Tuesday |
+| Test full vendor order flow | Wednesday |
+| Add order status update functionality | Thursday |
+| Help Person 7 with vendor notifications | Friday |
 
-* [ ] Vendor can add a product with image
-* [ ] Vendor can edit a product
-* [ ] Vendor can delete a product
-* [ ] Vendor sees only their own products
-* [ ] Buyer can see all products on homepage
-* [ ] Buyer can search for products
-* [ ] Buyer can filter by category
-* [ ] Buyer can sort by price
-* [ ] Buyer can view product details
-* [ ] All product pages are mobile responsive
+### Vendor Order Stats
 
----
-
-# Quick Reference: File Locations
-
-| File                 | Location                               | Owner     |
-| -------------------- | -------------------------------------- | --------- |
-| Add Product          | public/vendor/products/create.php      | Person 5  |
-| Edit Product         | public/vendor/products/edit.php        | Person 5  |
-| Delete Product       | public/vendor/products/delete.php      | Person 5  |
-| Vendor Products List | public/vendor/products/index.php       | Person 5  |
-| Public Catalogue     | public/products/index.php              | Person 6  |
-| Product Details      | public/products/show.php               | Person 6  |
-| Product Styles       | public/assets/css/vendor-dashboard.css | Person 10 |
-| Uploads Folder       | public/uploads/products/               | Person 5  |
+- Total Orders
+- Pending Orders
+- Shipped Orders
+- Delivered Orders
 
 ---
 
-# Blockers Log
+## Person 5 – Amogelang (Product Management)
 
-| Date | Blocker | Affects | Status |
-| ---- | ------- | ------- | ------ |
-|      |         |         |        |
+| Task | Deadline |
+|----------|----------|
+| Ensure stock updates after checkout | Tuesday |
+| Add Out of Stock badge | Wednesday |
+| Help Person 7 with cart product data | As needed |
+| Test product availability during checkout | Thursday |
+
+---
+
+## Person 6 – Bianca (Buyer Marketplace)
+
+| Task | Deadline |
+|----------|----------|
+| Add Add-to-Cart functionality | Tuesday |
+| Enable Add-to-Cart from catalogue grid | Wednesday |
+| Add stock validation | Wednesday |
+| Help Person 7 integrate cart UI | As needed |
+
+---
+
+# Person 7 – Amanda (Shopping Cart & Orders) ⭐ MAIN FOCUS
+
+| Task | Deadline |
+|----------|----------|
+| Build cart/index.php | Tuesday |
+| Build cart/checkout.php | Wednesday |
+| Build cart/success.php | Thursday |
+| Build orders/index.php | Thursday |
+| Implement Stripe test payment | Thursday |
+| Create order after successful payment | Thursday |
+| Add order items to database | Thursday |
+| Test full cart → checkout → order flow | Friday |
+
+### Pages To Create
+
+| Page | Purpose |
+|----------|----------|
+| public/cart/index.php | Cart page |
+| public/cart/checkout.php | Checkout page |
+| public/cart/success.php | Order confirmation |
+| public/orders/index.php | Buyer order history |
+
+### Cart Features
+
+- Add to Cart
+- Update Quantity
+- Remove Item
+- Calculate Totals
+- Stock Validation
+- Cart Persistence
+
+### Checkout Features
+
+- Shipping Address Form
+- Stripe Test Payment
+- Create Order
+- Create Order Items
+- Clear Cart After Checkout
+
+### Stripe Test Card
+
+```text
+Card Number: 4242 4242 4242 4242
+Expiry: Any Future Date
+CVC: Any 3 Digits
+```
+
+---
+
+# Person 8 – Molemo (Admin Dashboard) ⭐ MAIN FOCUS
+
+| Task | Deadline |
+|----------|----------|
+| Build admin/dashboard.php | Tuesday |
+| Build admin/vendors.php | Wednesday |
+| Build admin/products.php | Wednesday |
+| Build admin/orders.php | Thursday |
+| Vendor approval system | Thursday |
+| Test admin approval flow | Friday |
+
+### Admin Pages To Create
+
+| Page | Purpose |
+|----------|----------|
+| admin/dashboard.php | Platform overview |
+| admin/vendors.php | Vendor approval |
+| admin/products.php | All products |
+| admin/orders.php | All orders |
+
+### Dashboard Statistics
+
+- Total Vendors
+- Total Products
+- Total Orders
+- Total Revenue
+- Recent Orders
+- Recent Vendor Applications
+
+### Vendor Approval Flow
+
+```text
+Vendor Applies
+      ↓
+Status = Pending
+      ↓
+Admin Reviews
+      ↓
+Approve / Reject
+      ↓
+Vendor Gains Access
+```
+
+---
+
+## Person 9 – Dan (Testing & QA)
+
+| Task | Deadline |
+|----------|----------|
+| Create Week 4 test cases | Monday |
+| Execute cart tests | Tuesday |
+| Execute checkout tests | Wednesday |
+| Execute admin tests | Thursday |
+| Log bugs in GitHub Issues | As Found |
+| Submit weekly test report | Friday |
+
+### Test Cases
+
+| ID | Description | Priority |
+|----------|----------|----------|
+| TC-CART-001 | Add product to cart | High |
+| TC-CART-002 | Update quantity | High |
+| TC-CART-003 | Remove item | High |
+| TC-CART-004 | Cart persists after login/logout | Medium |
+| TC-CHECKOUT-001 | Valid Stripe checkout | High |
+| TC-CHECKOUT-002 | Empty cart checkout | High |
+| TC-CHECKOUT-003 | Insufficient stock | High |
+| TC-CHECKOUT-004 | Order created after payment | High |
+| TC-ADMIN-001 | Dashboard stats display | High |
+| TC-ADMIN-002 | Approve vendor | High |
+| TC-ADMIN-003 | Reject vendor | High |
+| TC-ADMIN-004 | View all orders | High |
+
+---
+
+## Person 10 – Lesiamo (Frontend UI / Responsive Design)
+
+| Task | Deadline |
+|----------|----------|
+| Style cart page | Tuesday |
+| Style checkout page | Wednesday |
+| Style order history page | Wednesday |
+| Style admin dashboard | Thursday |
+| Style vendor approval page | Thursday |
+| Ensure responsive design | Friday |
+
+### Design Guidelines
+
+| Page | Style |
+|----------|----------|
+| Cart | Table + Summary Card |
+| Checkout | Form + Stripe Card |
+| Orders | Table Layout |
+| Admin | Dashboard Cards + Tables |
+
+---
+
+## Person 11 – Omphile (Documentation & Demo Video Support)
+
+| Task | Deadline |
+|----------|----------|
+| Create docs/week4-checklist.md | Monday |
+| Document checkout flow | Wednesday |
+| Document admin dashboard | Thursday |
+| Update setup guide with Stripe instructions | Thursday |
+| Collect screenshots | Ongoing |
+| Assist PM with documentation | As Needed |
+
+---
+
+# Week 4 Dependencies
+
+| Task | Depends On | Owner |
+|----------|----------|----------|
+| Cart Functionality | Database Ready | Person 7 |
+| Checkout / Stripe | Cart Working | Person 7 |
+| Order Creation | Checkout Working | Person 7 |
+| Admin Dashboard | Database Ready | Person 8 |
+| Vendor Approval | Apply Page Working | Person 8 |
+| Cart UI Styling | Person 7 PHP Structure | Person 10 |
+| Admin UI Styling | Person 8 PHP Structure | Person 10 |
+| Testing | Person 7 + Person 8 | Person 9 |
+
+---
+
+# Week 4 Success Criteria
+
+## Cart & Checkout
+
+- [ ] Buyer can add products to cart
+- [ ] Buyer can update quantities
+- [ ] Buyer can remove products
+- [ ] Cart calculates totals correctly
+- [ ] Buyer can proceed to checkout
+- [ ] Buyer can enter shipping address
+- [ ] Stripe payment works
+- [ ] Order created successfully
+- [ ] Order items saved
+- [ ] Cart cleared after checkout
+- [ ] Buyer can view order history
+
+## Admin Dashboard
+
+- [ ] Admin can view platform statistics
+- [ ] Admin can view vendor applications
+- [ ] Admin can approve vendors
+- [ ] Admin can reject vendors
+- [ ] Admin can view products
+- [ ] Admin can view orders
+- [ ] Vendor gains access after approval
+
+## Vendor Orders
+
+- [ ] Vendor can view orders
+- [ ] Vendor can update order status
 
 ---
 
 # Weekly Test Report (Due Friday)
 
-| Metric               | Value |
-| -------------------- | ----- |
-| Total tests executed |       |
-| Passed               |       |
-| Failed               |       |
-| Blocked              |       |
-| Bugs logged          |       |
-| Critical bugs        |       |
+| Metric | Value |
+|----------|----------|
+| Total Tests Executed | |
+| Passed | |
+| Failed | |
+| Blocked | |
+| Bugs Logged | |
+| Critical Bugs | |
 
 ---
 
+# Quick Reference: File Locations
+
+| File | Location | Owner |
+|----------|----------|----------|
+| Cart Page | public/cart/index.php | Person 7 |
+| Checkout Page | public/cart/checkout.php | Person 7 |
+| Success Page | public/cart/success.php | Person 7 |
+| Order History | public/orders/index.php | Person 7 |
+| Admin Dashboard | public/admin/dashboard.php | Person 8 |
+| Admin Vendors | public/admin/vendors.php | Person 8 |
+| Admin Products | public/admin/products.php | Person 8 |
+| Admin Orders | public/admin/orders.php | Person 8 |
+| Cart Styles | public/assets/css/vendor-dashboard.css | Person 10 |
+| Cart JS | public/assets/js/vendor-dashboard.js | Person 10 |
+
+---
 **Last Updated:** [2026/06/15]
