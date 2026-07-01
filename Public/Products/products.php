@@ -1,78 +1,62 @@
-<?php
-include 'db.php';
-
-$search = $_GET['search'] ?? '';
-$category = $_GET['category'] ?? '';
-$sort = $_GET['sort'] ?? '';
-
-$sql = "SELECT p.*, c.name AS category_name 
-        FROM products p 
-        JOIN categories c ON p.category_id = c.id 
-        WHERE 1";
-
-if ($search) $sql .= " AND p.name LIKE '%".$conn->real_escape_string($search)."%'";
-if ($category) $sql .= " AND c.name='".$conn->real_escape_string($category)."'";
-if ($sort=="low") $sql .= " ORDER BY p.price ASC";
-elseif ($sort=="high") $sql .= " ORDER BY p.price DESC";
-
-$result = $conn->query($sql);
-?>
+<?php include 'db.php'; ?>
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Products - Bona Markets</title>
-  <link rel="stylesheet" href="style.css">
+    <title>Categories - Bona Market</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <nav>
-    <a href="index.php">Home</a> | 
-    <a href="products.php">Categories</a> | 
-    <a href="about.php">About</a> | 
-    <a href="cart.php">Cart</a>
-  </nav>
+<header>
+    <div class="logo">Bona Market</div>
+    <nav>
+        <a href="index.php">Home</a>
+        <a href="products.php">Categories</a>
+        <a href="about.php">About</a>
+        <a href="cart.php">Cart</a>
+    </nav>
+</header>
 
-  <form method="GET" class="filters">
-    <input type="text" name="search" placeholder="Search products..." value="<?php echo $search; ?>">
-    <select name="category">
-      <option value="">All Categories</option>
-      <?php
-      $cats = $conn->query("SELECT * FROM categories");
-      while($c = $cats->fetch_assoc()) {
-        $selected = ($category==$c['name']) ? "selected" : "";
-        echo "<option $selected>".$c['name']."</option>";
-      }
-      ?>
-    </select>
-    <select name="sort">
-      <option value="">Sort by Price</option>
-      <option value="low" <?php if($sort=="low") echo "selected"; ?>>Low to High</option>
-      <option value="high" <?php if($sort=="high") echo "selected"; ?>>High to Low</option>
-    </select>
-    <button type="submit">Filter</button>
-  </form>
+<section class="filters">
+    <form method="GET" action="products.php" class="filter-bar">
+        <input type="text" name="search" placeholder="Search products..." value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
+        <input type="number" name="price" placeholder="Price up to R20000" value="<?php echo isset($_GET['price']) ? $_GET['price'] : ''; ?>">
+        <button type="submit" class="btn">Filter</button>
+    </form>
+</section>
 
-  <h1>All Products</h1>
-  <div class="grid">
-    <?php while($p = $result->fetch_assoc()): ?>
-      <div class="card">
-        <img src="assets/<?php echo $p['image']; ?>" alt="<?php echo $p['name']; ?>">
-        <h3><?php echo $p['name']; ?></h3>
-        <p>Category: <?php echo $p['category_name']; ?></p>
-        <p>Price: R<?php echo $p['price']; ?></p>
-        <p><?php echo $p['stock']>0 ? $p['stock']." in stock" : "Out of Stock"; ?></p>
-        <a href="product.php?id=<?php echo $p['id']; ?>" class="btn">View More</a>
-      </div>
-    <?php endwhile; ?>
-  </div>
+<section class="products">
+    <h2>Product Catalogue</h2>
+    <?php
+    $catResult = mysqli_query($conn, "SELECT * FROM categories");
+    while ($cat = mysqli_fetch_assoc($catResult)) {
+        echo "<h3>" . $cat['name'] . "</h3><div class='grid'>";
+        $query = "SELECT * FROM products WHERE category_id=" . $cat['id'];
 
-  <footer>
-    <div class="footer-links">
-      <a href="index.php">Home</a> | 
-      <a href="products.php">Categories</a> | 
-      <a href="about.php">About</a> | 
-      <a href="cart.php">Cart</a>
-    </div>
-    <p>&copy; 2026 Bona Markets. All rights reserved.</p>
-  </footer>
+        if (!empty($_GET['search'])) {
+            $search = mysqli_real_escape_string($conn, $_GET['search']);
+            $query .= " AND name LIKE '%$search%'";
+        }
+        if (!empty($_GET['price'])) {
+            $price = intval($_GET['price']);
+            $query .= " AND price <= $price";
+        }
+
+        $result = mysqli_query($conn, $query . " LIMIT 4");
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo "<div class='card'>
+                    <img src='assets/" . $row['image'] . "' alt='" . $row['name'] . "'>
+                    <h4>" . $row['name'] . "</h4>
+                    <p>R" . $row['price'] . "</p>
+                    <a href='product.php?id=" . $row['id'] . "' class='btn'>View Details</a>
+                  </div>";
+        }
+        echo "</div><a href='category.php?id=" . $cat['id'] . "' class='btn view-more'>View More</a>";
+    }
+    ?>
+</section>
+
+<footer>
+    <p>&copy; 2026 Bona Market. All rights reserved.</p>
+</footer>
 </body>
 </html>

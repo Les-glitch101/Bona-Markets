@@ -1,7 +1,12 @@
 <?php
-$conn = new mysqli("localhost", "root", "", "bona_markets", 3306);
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
+$host = "localhost";
+$user = "root";
+$pass = "";
+$dbname = "bona_markets";
+
+$conn = mysqli_connect($host, $user, $pass, $dbname);
+
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
 }
 ?>
-
